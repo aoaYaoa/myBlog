@@ -1,0 +1,304 @@
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-color);
+  border-radius: 2px;
+}
+
+/* 渐变边框效果 */
+.post-card {
+  position: relative;
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 2px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.post-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: linear-gradient(45deg, #6C5CE7, #00B894);
+  border-radius: 17px;
+  filter: blur(10px);
+}
+
+/* 图标悬停动画 */
+.social-icon {
+  transition: transform 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px) scale(1.1);
+}
+
+/* 3D按钮效果 */
+.btn-3d {
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-3d:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.btn-3d:active {
+  transform: translateY(1px);
+}
+
+/* 基础色应用 */
+body {
+  background: transparent;
+  color: var(--text-primary-color);
+}
+
+a {
+  color: var(--primary-color);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  padding: 12px 24px;
+  box-shadow: var(--button-shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(42, 92, 170, 0.3);
+}
+
+/* 卡片投影 */
+.post-card:hover {
+  transform: translateY(-5px);
+}
+
+/* 渐变标题 */
+.gradient-heading {
+  background: var(--gradient-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* 添加代码雨动态背景 */
+#web_bg {
+  background: url('/img/europeana.jpg') center center / cover no-repeat fixed !important;
+  background-color: transparent !important;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+@media (max-width: 768px) {
+  #web_bg {
+    background-attachment: scroll;
+    background-size: contain;
+  }
+
+  .post-card::before {
+    filter: blur(5px);
+  }
+}
+
+/* 导航栏背景优化 */
+#nav {
+  background: url('/img/europeana.jpg') center center / cover no-repeat !important;
+  background-color: transparent !important;
+  transition: all 0.3s ease;
+}
+
+#nav:hover {
+  background-position: center 50%;
+}
+
+/* 导航文字阴影 */
+.nav-item a {
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  padding: 0 1.2rem;
+  position: relative;
+}
+
+.nav-item a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--hover-color);
+  transition: width 0.3s ease;
+}
+
+.nav-item a:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  #nav {
+    height: 50px;
+    background-position: center 60%;
+  }
+}
+
+/* 导航栏logo样式 */
+#nav #blog_name {
+  display: flex;
+  align-items: center;
+}
+
+#nav #blog_name img {
+  width: 40px;              /* 头像大小 */
+  height: 40px;
+  border-radius: 50%;       /* 圆形头像 */
+  margin-right: 10px;       /* 头像和文字间距 */
+  transition: all 0.3s;     /* 过渡动画 */
+  object-fit: cover;        /* 图片填充方式 */
+}
+
+/* 头像悬停效果 */
+#nav #blog_name img:hover {
+  transform: rotate(360deg) scale(1.1);  /* 旋转放大效果 */
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+/* 用户名样式 */
+#nav #blog_name .site-name {
+  color: #fff;              /* 文字颜色 */
+  font-weight: bold;        /* 文字加粗 */
+  font-size: 1.3em;        /* 文字大小 */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);  /* 文字阴影 */
+}
+
+/* 适配移动端 */
+@media screen and (max-width: 768px) {
+  #nav #blog_name img {
+    width: 32px;
+    height: 32px;
+  }
+
+  #nav #blog_name .site-name {
+    font-size: 1.1em;
+  }
+}
+
+/* 首页大图样式 */
+#page-header.full_page {
+  background: url('/img/europeana.jpg') center center / cover no-repeat !important;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: transparent !important;
+}
+
+/* 首页标题样式 */
+#page-header #site-title {
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#page-header #site-subtitle {
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 遮罩层 */
+#page-header:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 确保文字在遮罩层上方 */
+#page-header #site-info {
+  position: relative;
+  z-index: 2;
+}
+
+/* 向下滚动按钮 */
+#scroll-down {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  animation: bounce 2s infinite;
+  z-index: 2;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  #page-header {
+    height: 60vh;
+    background-attachment: scroll;
+  }
+
+  #page-header #site-title {
+    font-size: 1.8em;
+  }
+
+  #page-header #site-subtitle {
+    font-size: 1.2em;
+  }
+}
+
+/* 确保内容可见 */
+#content-inner {
+  background: rgba(255,255,255,0.9);
+  position: relative;
+  z-index: 1;
+  margin-top: 1rem;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* 覆盖主题默认样式 */
+#page-header {
+  background-color: transparent !important;
+}
+
+/* 移除其他可能的背景色 */
+body {
+  background: transparent;
+}
+
+.layout {
+  background: transparent;
+}

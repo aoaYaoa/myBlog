@@ -1,0 +1,42 @@
+if theme && theme.menu
+  ul#nav.menus_items
+    each url, name in theme.menu
+      if name !== 'menu_settings'
+        li.menus_item
+          if typeof url === 'object'
+            a.site-page.group(href='javascript:void(0);')
+              if url.icon
+                i(class=url.icon)
+              span=' '+name
+              i.fas.fa-chevron-down
+            ul.menus_item_child
+              each i in url
+                if typeof i === 'object'
+                  each item, idx in i
+                    li
+                      a.site-page.child(href=item)
+                        if idx.includes('//')
+                          i.fa-solid.fa-link
+                        else
+                          i.fas.fa-hashtag
+                        span=' '+idx
+          else
+            a.site-page(href=url)
+              if url.split('||')[1]
+                i(class=url.split('||')[1])
+              span=' '+name.split('||')[0]
+else
+  // 当theme.menu不存在时显示基本菜单
+  ul#nav.menus_items
+    li.menus_item
+      a.site-page(href='/')
+        i.fas.fa-home
+        span=' 首页'
+    li.menus_item
+      a.site-page(href='/resources.html')
+        i.fas.fa-book
+        span=' 资源'
+    li.menus_item
+      a.site-page(href='/about/')
+        i.fas.fa-user
+        span=' 关于'

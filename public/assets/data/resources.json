@@ -1,0 +1,100 @@
+{
+  "categories": [
+    { "id": "all", "name": "全部", "default": true },
+    { "id": "extension", "name": "浏览器扩展" },
+    { "id": "frontend", "name": "前端开发" },
+    { "id": "backend", "name": "后端开发" },
+    { "id": "tool", "name": "实用工具" },
+    { "id": "design", "name": "设计资源" }
+  ],
+  "resources": [
+    {
+      "title": "AdBlock",
+      "description": "免费拦截 YouTube 和您喜欢的网站上的广告",
+      "category": "extension",
+      "tags": ["去广告", "浏览器扩展"],
+      "icon": {
+        "type": "fas fa-ban",
+        "gradient": "linear-gradient(135deg, #e94133, #c41a1a)"
+      },
+      "url": "https://getadblock.com/zh_CN/"
+    },
+    {
+      "title": "Adblock Plus",
+      "description": "在 YouTube 和您浏览的其他网站上去除广告",
+      "category": "extension",
+      "tags": ["去广告", "浏览器扩展"],
+      "icon": {
+        "type": "fas fa-shield-alt",
+        "gradient": "linear-gradient(135deg, #e33b2e, #c01616)"
+      },
+      "url": "https://adblockplus.org/zh_CN/"
+    },
+    {
+      "title": "Awesome Screenshot",
+      "description": "用于远程工作最佳的屏幕录制、屏幕截图和编辑工具",
+      "category": "extension",
+      "tags": ["截图", "录屏"],
+      "icon": {
+        "type": "fas fa-camera",
+        "gradient": "linear-gradient(135deg, #2ecc71, #16a349)"
+      },
+      "url": "https://www.awesomescreenshot.com/"
+    },
+    {
+      "title": "Axure RP Extension",
+      "description": "允许在Chrome中查看本地发布的Axure RP原型",
+      "category": "extension",
+      "tags": ["原型", "设计"],
+      "icon": {
+        "type": "fas fa-object-group",
+        "gradient": "linear-gradient(135deg, #0277bd, #004c8c)"
+      },
+      "url": "https://chrome.google.com/webstore/detail/axure-rp-extension-for-ch/dogkpdfcklifaemcdfbildhcofnopogp"
+    },
+    {
+      "title": "MDN Web 文档",
+      "description": "Mozilla的Web技术权威文档，包含HTML、CSS和JavaScript详细指南",
+      "category": "frontend",
+      "tags": ["文档", "教程"],
+      "icon": {
+        "type": "fab fa-html5",
+        "gradient": "linear-gradient(135deg, #e44d26, #f16529)"
+      },
+      "url": "https://developer.mozilla.org/zh-CN/"
+    },
+    {
+      "title": "Vue.js",
+      "description": "渐进式JavaScript框架，用于构建用户界面",
+      "category": "frontend",
+      "tags": ["框架", "前端"],
+      "icon": {
+        "type": "fab fa-vuejs",
+        "gradient": "linear-gradient(135deg, #41b883, #35495e)"
+      },
+      "url": "https://cn.vuejs.org/"
+    },
+    {
+      "title": "React",
+      "description": "用于构建用户界面的JavaScript库",
+      "category": "frontend",
+      "tags": ["框架", "前端"],
+      "icon": {
+        "type": "fab fa-react",
+        "gradient": "linear-gradient(135deg, #61dafb, #2d91c7)"
+      },
+      "url": "https://react.dev/"
+    },
+    {
+      "title": "Node.js",
+      "description": "基于Chrome V8引擎的JavaScript运行时",
+      "category": "backend",
+      "tags": ["JavaScript", "服务器"],
+      "icon": {
+        "type": "fab fa-node-js",
+        "gradient": "linear-gradient(135deg, #68a063, #3c873a)"
+      },
+      "url": "https://nodejs.org/zh-cn/"
+    }
+  ]
+}

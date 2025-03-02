@@ -1,0 +1,48 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 创建样式标签
+  const style = document.createElement('style');
+  style.textContent = `
+    #recent-posts > .recent-post-item {
+      position: relative !important;
+      opacity: 0 !important;
+      transform: translateY(30px) !important;
+      transition: all 0.8s ease-out !important;
+      border-left: 5px solid #ff6b6b !important;
+    }
+
+    #recent-posts > .recent-post-item.animated {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+      border-left: 5px solid #51cf66 !important;
+    }
+
+    /* 强制应用动画效果 */
+    .post-animated {
+      animation: postBounce 0.8s ease;
+    }
+
+    @keyframes postBounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0) !important;}
+      40% {transform: translateY(-10px) !important;}
+      60% {transform: translateY(-5px) !important;}
+    }
+  `;
+  document.head.appendChild(style);
+
+  // 应用动画类
+  setTimeout(() => {
+    document.querySelectorAll('#recent-posts > .recent-post-item').forEach((post, index) => {
+      setTimeout(() => {
+        post.classList.add('animated');
+        post.addEventListener('mouseenter', () => {
+          post.classList.add('post-animated');
+        });
+        post.addEventListener('mouseleave', () => {
+          post.classList.remove('post-animated');
+        });
+      }, index * 200);
+    });
+  }, 500);
+});
+</script>

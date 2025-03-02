@@ -1,0 +1,15 @@
+/* 禁用所有可能导致闪烁的过渡和动画 */
+.resources-standalone * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* 仅为需要动画的元素启用 */
+.resources-standalone .animate-in,
+.resources-standalone .loading-spinner {
+  animation: fadeIn 0.4s ease-out forwards !important;
+}
+
+.resources-standalone .loading-spinner {
+  animation: spin 1s ease-in-out infinite !important;
+}
