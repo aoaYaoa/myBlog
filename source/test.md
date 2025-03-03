@@ -14,4 +14,4 @@ date: 2023-01-01
 <img src="../img/avatar.jpg" alt="测试">
 
 绝对CDN链接：
-<img src="https://cdn.jsdelivr.net/gh/owner/repo/path/to/image.jpg" alt="使用CDN">
+<img src="https://img0.baidu.com/it/u=3607865720,773719330&fm=253&app=120&size=w931&n=0&f=JPEG&fmt=auto?sec=1741107600&t=9ad35d1db9008b82cc40c79e00a26bb0">
