@@ -1,6 +1,3 @@
 [submodule "themes/butterfly"]
     path = themes/butterfly
     url = https://github.com/jerryc127/hexo-theme-butterfly.git
-[submodule "themes/butterfly_backup"]
-    path = themes/butterfly_backup
-    url = https://github.com/jerryc127/hexo-theme-butterfly.git
