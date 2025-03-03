@@ -1095,9 +1095,9 @@ mobile:
 inject:
   head:
     - <link rel="stylesheet" href="/css/base.css">
-    - <link rel="stylesheet" href="/css/custom.css">
+    # - <link rel="stylesheet" href="/css/custom.css">
   bottom:
-    - <script src="/js/custom.js"></script>
+    # - <script src="/js/custom.js"></script>
     - <script src="/js/resources.js"></script>
 
 # 修改这一部分来使用自定义文件
