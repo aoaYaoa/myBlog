@@ -5,11 +5,10 @@
 
 [build]
   publish = "public"
-  command = "npm --version && node --version && npm install && npm list --depth=0 && git submodule update --init --recursive && hexo clean && hexo generate"
+  command = "npm --version && node --version && npm install && npm list --depth=0 && hexo clean && hexo generate"
 
 [build.environment]
   NODE_VERSION = "18"
 
-# 添加以下特定设置帮助Netlify处理子模块
 [build.processing]
   skip_processing = false
