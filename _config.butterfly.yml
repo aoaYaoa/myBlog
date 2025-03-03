@@ -56,7 +56,6 @@ menu:
     Go: /back-end/go/ || fab fa-golang
   资源: /resources/ || fas fa-compass
   关于: /about/ || fas fa-user
-  图床: /test/ || fas fa-image
 
 # --------------------------------------
 # Search Settings (搜索设置)
