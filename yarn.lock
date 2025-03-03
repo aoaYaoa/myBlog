@@ -1375,14 +1375,14 @@ hexo-renderer-marked@^7.0.0:
     jsdom "^25.0.1"
     marked "^15.0.4"
 
-hexo-renderer-pug@^3.0.0:
+hexo-renderer-pug@^3.0.0, hexo-renderer-pug@3.0.0:
   version "3.0.0"
   resolved "https://registry.npmmirror.com/hexo-renderer-pug/-/hexo-renderer-pug-3.0.0.tgz"
   integrity sha512-PmbLx6VkNv+mPLOe97OC4F8iTzTuj665dSYN7bZKArd4M/q7gb2tNs29VGuAOC50i9tvWY2f+tPQimf0GZ9Hyw==
   dependencies:
     pug "^3.0.2"
 
-hexo-renderer-stylus@^3.0.1:
+hexo-renderer-stylus@^3.0.1, hexo-renderer-stylus@3.0.1:
   version "3.0.1"
   resolved "https://registry.npmmirror.com/hexo-renderer-stylus/-/hexo-renderer-stylus-3.0.1.tgz"
   integrity sha512-cFm8ZwShBBeFcQwOXc8EK7lIZnSYVD6OJykdL4GBw99hxc4eD5Hlsi32nRzE8sgKv00jhX1s9Da3GVVFMPAVQg==
@@ -1464,6 +1464,11 @@ hexo-util@^3.0.1, hexo-util@^3.1.0, hexo-util@^3.3.0:
     htmlparser2 "^9.0.0"
     prismjs "^1.29.0"
     strip-indent "^3.0.0"
+
+hexo-wordcount@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.npmmirror.com/hexo-wordcount/-/hexo-wordcount-6.0.1.tgz"
+  integrity sha512-tbo2P9xRWEKQmRf7+XuPjx9It1MnaE26nA+EEb2DN39gK1x+26W7Nm4Iyp4AugQjBWYYDx7OLn4gp1WFxQpQew==
 
 hexo@^7.3.0:
   version "7.3.0"
