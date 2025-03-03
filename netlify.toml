@@ -9,3 +9,7 @@
 
 [build.environment]
   NODE_VERSION = "16"
+
+# 添加以下特定设置帮助Netlify处理子模块
+[build.processing]
+  skip_processing = false
