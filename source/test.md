@@ -13,5 +13,5 @@ date: 2023-01-01
 相对路径：
 <img src="../img/avatar.jpg" alt="测试">
 
-绝对URL：
-<img src="https://your-netlify-site-name.netlify.app/img/avatar.jpg" alt="测试">
+绝对CDN链接：
+<img src="https://cdn.jsdelivr.net/gh/owner/repo/path/to/image.jpg" alt="使用CDN">
