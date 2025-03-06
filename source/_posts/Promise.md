@@ -8,9 +8,7 @@ tags:
   - 入门
 cover: /img/posts/hello.jpg
 ---
-
 # 深入理解 JavaScript Promise：从入门到精通
-
 ## 前言
 Promise 是 JavaScript 中处理异步操作的核心机制，它的出现让我们告别了回调地狱，使异步代码更加清晰和易于维护。本文将深入探讨 Promise 的方方面面，从基础概念到高级应用，帮助你全面掌握这一重要特性。
 
@@ -463,7 +461,7 @@ console.log('script end');
 
 1. **同步执行的部分**：
    - Promise 构造函数中的代码
-   - resolve/reject 的调用
+   - resolve() 或 reject() 的调用
    - 直接在 Promise 中的代码
 
 2. **异步微任务**：
@@ -476,7 +474,7 @@ console.log('script end');
    // 示例：混合同步和异步操作
    console.log('1 - 同步');
    
-   new Promise((resolve, reject) => {
+   new Promise((resolve) => {
        console.log('2 - 同步');
        resolve('3 - 同步');
        console.log('4 - 同步');
@@ -802,6 +800,803 @@ async function getData() {
    - 注意内存泄漏（未处理的 Promise）
    - 合理使用 Promise.all 进行并行处理
 
+### 10.6 高级注意事项和陷阱
+
+#### 1. Promise.resolve/reject 的特殊行为
+```javascript
+// ❌ 错误理解：认为 Promise.resolve 总是同步执行
+Promise.resolve(Promise.resolve(1))  // Promise 嵌套的情况
+    .then(value => console.log(value));  // 1
+
+// ⚠️ 特别注意：传入 thenable 对象
+Promise.resolve({
+    then: function(resolve) {
+        resolve(42);
+    }
+}).then(value => console.log(value));  // 42
+
+// 注意：Promise.resolve 会展平 Promise
+const p1 = Promise.resolve(1);
+const p2 = Promise.resolve(p1); // p2 和 p1 是同一个 Promise
+console.log(p1 === p2); // true
+```
+
+#### 2. Promise 的并发控制
+```javascript
+// ❌ 错误做法：无控制地并发请求
+urls.map(url => fetch(url));  // 可能导致服务器压力过大
+
+// ✅ 正确做法：控制并发数量
+async function fetchWithConcurrency(urls, concurrency = 3) {
+    const results = [];
+    const executing = new Set();
+    
+    for (const url of urls) {
+        const promise = fetch(url).then(r => r.json());
+        results.push(promise);
+        
+        executing.add(promise);
+        const clean = () => executing.delete(promise);
+        promise.then(clean, clean);
+        
+        if (executing.size >= concurrency) {
+            await Promise.race(executing);
+        }
+    }
+    
+    return Promise.all(results);
+}
+
+// 使用示例
+const urls = ['url1', 'url2', 'url3', 'url4', 'url5'];
+fetchWithConcurrency(urls, 2)
+    .then(results => console.log('所有请求完成'));
+```
+
+#### 3. 循环中的 Promise 处理
+```javascript
+// ❌ 错误做法：在循环中使用 await
+async function wrong() {
+    const urls = ['url1', 'url2', 'url3'];
+    for (const url of urls) {
+        await fetch(url);  // 串行执行，效率低
+    }
+}
+
+// ✅ 正确做法：并行执行
+async function right() {
+    const urls = ['url1', 'url2', 'url3'];
+    const promises = urls.map(url => fetch(url));
+    const results = await Promise.all(promises);
+}
+
+// ✅ 需要按顺序执行时的正确做法
+async function sequential() {
+    const urls = ['url1', 'url2', 'url3'];
+    const results = [];
+    for (const url of urls) {
+        const result = await fetch(url);
+        results.push(await result.json());
+    }
+    return results;
+}
+```
+
+#### 4. Promise 竞态问题处理
+```javascript
+// ❌ 潜在问题：多个请求的响应顺序不确定
+let currentData;
+async function fetchData(id) {
+    const response = await fetch(`/api/${id}`);
+    currentData = await response.json();  // 可能被后发先至的请求覆盖
+}
+
+// ✅ 正确做法：使用标记或取消机制
+function createFetchWithAbort() {
+    let currentController = null;
+    
+    return async function fetchData(id) {
+        if (currentController) {
+            currentController.abort();  // 取消之前的请求
+        }
+        
+        currentController = new AbortController();
+        try {
+            const response = await fetch(`/api/${id}`, {
+                signal: currentController.signal
+            });
+            return await response.json();
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                // 请求被取消，忽略错误
+                return null;
+            }
+            throw error;
+        }
+    };
+}
+
+// 使用示例
+const fetchWithAbort = createFetchWithAbort();
+fetchWithAbort('id1');
+fetchWithAbort('id2'); // id1 的请求会被取消
+```
+
+#### 5. async/await 与 Promise 混用的陷阱
+```javascript
+// ❌ 错误做法：混合使用可能导致错误处理混乱
+async function mixed() {
+    try {
+        const result = await somePromise()
+            .then(data => process(data))  // 这里的错误不会被 catch 捕获
+            .catch(err => handle(err));
+    } catch (error) {
+        // 这里捕获不到 .then 中的错误
+    }
+}
+
+// ✅ 正确做法：统一使用 async/await
+async function consistent() {
+    try {
+        const data = await somePromise();
+        return await process(data);
+    } catch (error) {
+        return handle(error);
+    }
+}
+
+// ✅ 如果必须混用，确保错误处理的完整性
+async function mixedButSafe() {
+    try {
+        return await somePromise()
+            .then(async data => {
+                try {
+                    return await process(data);
+                } catch (error) {
+                    throw error; // 确保错误能被外层 catch 捕获
+                }
+            });
+    } catch (error) {
+        return handle(error);
+    }
+}
+```
+
+#### 6. Promise 内存泄漏的其他情况
+```javascript
+// ❌ 潜在问题：事件监听器中的 Promise
+class DataLoader {
+    constructor() {
+        this.listener = this.handleData.bind(this);
+        eventEmitter.on('data', this.listener);
+    }
+    
+    async handleData(data) {
+        await this.processData(data);  // 如果组件被销毁，这个 Promise 可能永远挂着
+    }
+}
+
+// ✅ 正确做法：确保清理
+class DataLoader {
+    constructor() {
+        this.abortController = new AbortController();
+        this.listener = this.handleData.bind(this);
+        eventEmitter.on('data', this.listener);
+    }
+    
+    async handleData(data) {
+        if (this.abortController.signal.aborted) return;
+        await this.processData(data);
+    }
+    
+    destroy() {
+        this.abortController.abort();
+        eventEmitter.off('data', this.listener);
+    }
+}
+
+// 在 React 组件中的使用示例
+useEffect(() => {
+    const loader = new DataLoader();
+    return () => loader.destroy(); // 清理函数
+}, []);
+```
+
+#### 7. 特殊场景的注意事项
+
+1. **Promise 链中的值传递**：
+```javascript
+// ❌ 错误做法：没有正确传递值
+promise
+    .then(value => {
+        process(value);
+        // 没有返回值，下一个 then 将收到 undefined
+    })
+    .then(value => {
+        // value 是 undefined
+    });
+
+// ✅ 正确做法：确保正确传递值
+promise
+    .then(value => {
+        process(value);
+        return value; // 显式返回需要传递的值
+    })
+    .then(value => {
+        // value 是上一步返回的值
+    });
+```
+
+2. **Promise 的错误恢复链**：
+```javascript
+// ✅ 高级错误恢复模式
+fetchData()
+    .catch(error => {
+        if (error.type === 'network') {
+            return fetchFromCache(); // 尝试从缓存获取
+        }
+        throw error; // 其他错误继续传播
+    })
+    .catch(error => {
+        if (error.type === 'cache') {
+            return fetchFromBackup(); // 尝试从备份获取
+        }
+        throw error;
+    })
+    .catch(error => {
+        return defaultValue; // 最后的降级处理
+    });
+```
+
+3. **条件 Promise 执行**：
+```javascript
+// ✅ 根据条件决定是否执行 Promise
+async function conditionalFetch(condition) {
+    if (!condition) {
+        return null;
+    }
+    
+    try {
+        const response = await fetch('/api/data');
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch failed:', error);
+        return null;
+    }
+}
+```
+
+## 参考资料
+- [MDN Promise 文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- [JavaScript Promise 规范](https://promisesaplus.com/)
+- [ECMAScript Promise 规范](https://tc39.es/ecma262/#sec-promise-objects)
+
+## 11. 更多实际应用场景
+
+### 11.1 文件上传与进度监控
+```javascript
+function uploadFileWithProgress(file, onProgress) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('file', file);
+
+        xhr.upload.addEventListener('progress', (event) => {
+            if (event.lengthComputable) {
+                const progress = (event.loaded / event.total) * 100;
+                onProgress(progress);
+            }
+        });
+
+        xhr.addEventListener('load', () => resolve(xhr.response));
+        xhr.addEventListener('error', () => reject(new Error('Upload failed')));
+        xhr.addEventListener('abort', () => reject(new Error('Upload aborted')));
+
+        xhr.open('POST', '/api/upload');
+        xhr.send(formData);
+    });
+}
+
+// 使用示例
+const fileInput = document.querySelector('input[type="file"]');
+fileInput.addEventListener('change', async (e) => {
+    try {
+        const file = e.target.files[0];
+        await uploadFileWithProgress(file, (progress) => {
+            console.log(`Upload progress: ${progress}%`);
+        });
+        console.log('Upload complete');
+    } catch (error) {
+        console.error('Upload error:', error);
+    }
+});
+```
+
+### 11.2 带重试机制的API请求
+```javascript
+async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            if (i === maxRetries - 1) throw error;
+            await delay(Math.pow(2, i) * 1000); // 指数退避
+            console.log(`Retrying... (${i + 1}/${maxRetries})`);
+        }
+    }
+}
+
+// 使用示例
+fetchWithRetry('/api/data')
+    .then(data => console.log('Success:', data))
+    .catch(error => console.error('Final error:', error));
+```
+
+### 11.3 资源预加载
+```javascript
+class ResourcePreloader {
+    constructor() {
+        this.cache = new Map();
+    }
+
+    preload(url) {
+        if (this.cache.has(url)) {
+            return Promise.resolve(this.cache.get(url));
+        }
+
+        const promise = fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                this.cache.set(url, data);
+                return data;
+            });
+
+        this.cache.set(url, promise);
+        return promise;
+    }
+
+    get(url) {
+        return this.cache.get(url) || this.preload(url);
+    }
+}
+
+// 使用示例
+const preloader = new ResourcePreloader();
+// 预加载资源
+preloader.preload('/api/user/1');
+preloader.preload('/api/user/2');
+
+// 稍后使用
+async function displayUser(id) {
+    const userData = await preloader.get(`/api/user/${id}`);
+    // 使用预加载的数据
+}
+```
+
+### 11.4 并发请求限制器
+```javascript
+class RequestLimiter {
+    constructor(maxConcurrent = 5) {
+        this.maxConcurrent = maxConcurrent;
+        this.currentRequests = 0;
+        this.queue = [];
+    }
+
+    async add(promiseFactory) {
+        if (this.currentRequests >= this.maxConcurrent) {
+            await new Promise(resolve => this.queue.push(resolve));
+        }
+
+        this.currentRequests++;
+        try {
+            return await promiseFactory();
+        } finally {
+            this.currentRequests--;
+            if (this.queue.length > 0) {
+                const next = this.queue.shift();
+                next();
+            }
+        }
+    }
+}
+
+// 使用示例
+const limiter = new RequestLimiter(3);
+const urls = Array.from({ length: 10 }, (_, i) => `/api/item/${i}`);
+
+Promise.all(
+    urls.map(url => 
+        limiter.add(() => fetch(url).then(r => r.json()))
+    )
+).then(results => console.log('All requests completed'));
+```
+
+## 12. 详细错误处理指南
+
+### 12.1 错误类型分类
+```javascript
+class NetworkError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'NetworkError';
+    }
+}
+
+class ValidationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'ValidationError';
+    }
+}
+
+class TimeoutError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'TimeoutError';
+    }
+}
+
+// 使用示例
+async function fetchWithErrorHandling(url) {
+    try {
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            switch (response.status) {
+                case 404:
+                    throw new ValidationError('Resource not found');
+                case 401:
+                    throw new ValidationError('Unauthorized');
+                case 503:
+                    throw new NetworkError('Service unavailable');
+                default:
+                    throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        }
+
+        return await response.json();
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            // 处理验证错误
+            console.error('Validation error:', error.message);
+            return null;
+        } else if (error instanceof NetworkError) {
+            // 处理网络错误
+            console.error('Network error:', error.message);
+            throw error; // 重新抛出网络错误
+        } else {
+            // 处理其他错误
+            console.error('Unexpected error:', error);
+            throw error;
+        }
+    }
+}
+```
+
+### 12.2 全局错误处理
+```javascript
+class ErrorHandler {
+    static handle(error) {
+        if (error instanceof ValidationError) {
+            // 处理验证错误
+            this.handleValidationError(error);
+        } else if (error instanceof NetworkError) {
+            // 处理网络错误
+            this.handleNetworkError(error);
+        } else if (error instanceof TimeoutError) {
+            // 处理超时错误
+            this.handleTimeoutError(error);
+        } else {
+            // 处理未知错误
+            this.handleUnknownError(error);
+        }
+    }
+
+    static handleValidationError(error) {
+        console.error('Validation Error:', error.message);
+        // 显示用户友好的错误消息
+    }
+
+    static handleNetworkError(error) {
+        console.error('Network Error:', error.message);
+        // 尝试重新连接
+    }
+
+    static handleTimeoutError(error) {
+        console.error('Timeout Error:', error.message);
+        // 提示用户重试
+    }
+
+    static handleUnknownError(error) {
+        console.error('Unknown Error:', error);
+        // 记录错误并通知开发团队
+    }
+}
+
+// 使用示例
+window.addEventListener('unhandledrejection', event => {
+    ErrorHandler.handle(event.reason);
+});
+```
+
+## 13. 性能优化最佳实践
+
+### 13.1 Promise 批处理
+```javascript
+class PromiseBatcher {
+    constructor(batchSize = 100, interval = 50) {
+        this.batchSize = batchSize;
+        this.interval = interval;
+        this.queue = [];
+        this.pending = false;
+    }
+
+    add(item) {
+        return new Promise((resolve, reject) => {
+            this.queue.push({ item, resolve, reject });
+            this.process();
+        });
+    }
+
+    async process() {
+        if (this.pending || this.queue.length === 0) return;
+        this.pending = true;
+
+        await new Promise(resolve => setTimeout(resolve, this.interval));
+
+        const batch = this.queue.splice(0, this.batchSize);
+        const items = batch.map(({ item }) => item);
+
+        try {
+            const results = await this.processBatch(items);
+            batch.forEach(({ resolve }, index) => resolve(results[index]));
+        } catch (error) {
+            batch.forEach(({ reject }) => reject(error));
+        }
+
+        this.pending = false;
+        if (this.queue.length > 0) {
+            this.process();
+        }
+    }
+
+    async processBatch(items) {
+        // 实现批处理逻辑
+        return items.map(item => `Processed ${item}`);
+    }
+}
+
+// 使用示例
+const batcher = new PromiseBatcher();
+for (let i = 0; i < 1000; i++) {
+    batcher.add(i).then(result => console.log(result));
+}
+```
+
+### 13.2 Promise 缓存优化
+```javascript
+class PromiseCache {
+    constructor(ttl = 60000) { // 默认缓存时间 1 分钟
+        this.cache = new Map();
+        this.ttl = ttl;
+    }
+
+    async get(key, promiseFactory) {
+        const cached = this.cache.get(key);
+        if (cached && Date.now() - cached.timestamp < this.ttl) {
+            return cached.data;
+        }
+
+        const data = await promiseFactory();
+        this.cache.set(key, {
+            data,
+            timestamp: Date.now()
+        });
+        return data;
+    }
+
+    invalidate(key) {
+        this.cache.delete(key);
+    }
+
+    clear() {
+        this.cache.clear();
+    }
+}
+
+// 使用示例
+const cache = new PromiseCache();
+async function fetchUserWithCache(userId) {
+    return cache.get(
+        `user_${userId}`,
+        () => fetch(`/api/users/${userId}`).then(r => r.json())
+    );
+}
+```
+
+### 13.3 内存优化
+```javascript
+class MemoryEfficientPromise {
+    static async batch(items, processor, batchSize = 100) {
+        const results = [];
+        for (let i = 0; i < items.length; i += batchSize) {
+            const batch = items.slice(i, i + batchSize);
+            const batchResults = await Promise.all(
+                batch.map(processor)
+            );
+            results.push(...batchResults);
+            
+            // 允许垃圾回收
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
+        return results;
+    }
+
+    static async stream(asyncIterable, processor) {
+        const results = [];
+        for await (const item of asyncIterable) {
+            results.push(await processor(item));
+            
+            // 定期清理
+            if (results.length % 1000 === 0) {
+                await new Promise(resolve => setTimeout(resolve, 0));
+            }
+        }
+        return results;
+    }
+}
+
+// 使用示例
+const items = Array.from({ length: 10000 }, (_, i) => i);
+MemoryEfficientPromise.batch(items, async (item) => {
+    // 处理每个项目
+    return item * 2;
+}).then(results => console.log('Processed items:', results.length));
+```
+
+## 14. 补充最佳实践建议
+
+### 14.1 Promise 链优化
+```javascript
+// ✅ 优化 Promise 链
+async function optimizedChain() {
+    try {
+        // 1. 并行执行无依赖的 Promise
+        const [data1, data2] = await Promise.all([
+            fetchData1(),
+            fetchData2()
+        ]);
+
+        // 2. 串行执行有依赖的 Promise
+        const result1 = await processData(data1);
+        const result2 = await processData(data2);
+
+        // 3. 条件执行
+        if (needsExtra(result1)) {
+            await extraProcessing(result1);
+        }
+
+        return [result1, result2];
+    } catch (error) {
+        // 统一错误处理
+        ErrorHandler.handle(error);
+        throw error;
+    }
+}
+```
+
+### 14.2 资源管理
+```javascript
+class ResourceManager {
+    constructor() {
+        this.resources = new Map();
+        this.locks = new Map();
+    }
+
+    async acquire(key) {
+        if (this.locks.has(key)) {
+            await this.locks.get(key);
+        }
+
+        const lock = new Promise(resolve => {
+            this.locks.set(key, resolve);
+        });
+
+        try {
+            if (!this.resources.has(key)) {
+                const resource = await this.createResource(key);
+                this.resources.set(key, resource);
+            }
+            return this.resources.get(key);
+        } finally {
+            this.locks.delete(key);
+            lock.resolve();
+        }
+    }
+
+    async release(key) {
+        if (this.resources.has(key)) {
+            const resource = this.resources.get(key);
+            await this.cleanupResource(resource);
+            this.resources.delete(key);
+        }
+    }
+
+    async createResource(key) {
+        // 实现资源创建逻辑
+    }
+
+    async cleanupResource(resource) {
+        // 实现资源清理逻辑
+    }
+}
+```
+
+### 14.3 监控和日志
+```javascript
+class PromiseMonitor {
+    constructor() {
+        this.metrics = {
+            total: 0,
+            success: 0,
+            failure: 0,
+            timing: []
+        };
+    }
+
+    async track(promise, metadata = {}) {
+        const startTime = Date.now();
+        this.metrics.total++;
+
+        try {
+            const result = await promise;
+            this.metrics.success++;
+            this.recordTiming(startTime, metadata);
+            return result;
+        } catch (error) {
+            this.metrics.failure++;
+            this.recordError(error, metadata);
+            throw error;
+        }
+    }
+
+    recordTiming(startTime, metadata) {
+        const duration = Date.now() - startTime;
+        this.metrics.timing.push({
+            duration,
+            ...metadata,
+            timestamp: new Date()
+        });
+    }
+
+    recordError(error, metadata) {
+        console.error('Promise Error:', {
+            error: error.message,
+            stack: error.stack,
+            ...metadata,
+            timestamp: new Date()
+        });
+    }
+
+    getMetrics() {
+        return {
+            ...this.metrics,
+            successRate: this.metrics.success / this.metrics.total,
+            averageDuration: this.calculateAverageDuration()
+        };
+    }
+
+    calculateAverageDuration() {
+        if (this.metrics.timing.length === 0) return 0;
+        const sum = this.metrics.timing.reduce((acc, { duration }) => acc + duration, 0);
+        return sum / this.metrics.timing.length;
+    }
+}
+
 // 使用示例
 const monitor = new PromiseMonitor();
 async function monitoredOperation() {
@@ -810,3 +1605,54 @@ async function monitoredOperation() {
         { operation: 'fetchData', priority: 'high' }
     );
 }
+```
+
+### 14.4 测试最佳实践
+```javascript
+// Promise 测试辅助函数
+class PromiseTestUtils {
+    static async expectResolve(promise) {
+        let error;
+        try {
+            await promise;
+        } catch (e) {
+            error = e;
+        }
+        expect(error).toBeUndefined();
+    }
+
+    static async expectReject(promise) {
+        let error;
+        try {
+            await promise;
+        } catch (e) {
+            error = e;
+        }
+        expect(error).toBeDefined();
+    }
+
+    static createDeferred() {
+        let resolve, reject;
+        const promise = new Promise((res, rej) => {
+            resolve = res;
+            reject = rej;
+        });
+        return { promise, resolve, reject };
+    }
+}
+
+// 测试示例
+describe('Promise Tests', () => {
+    it('should handle successful operations', async () => {
+        const { promise, resolve } = PromiseTestUtils.createDeferred();
+        setTimeout(() => resolve('success'), 100);
+        await PromiseTestUtils.expectResolve(promise);
+    });
+
+    it('should handle failures', async () => {
+        const { promise, reject } = PromiseTestUtils.createDeferred();
+        setTimeout(() => reject(new Error('fail')), 100);
+        await PromiseTestUtils.expectReject(promise);
+    });
+});
+```
