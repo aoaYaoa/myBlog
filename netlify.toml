@@ -5,10 +5,12 @@
 
 [build]
   publish = "public"
-  command = "export NODE_OPTIONS=--max_old_space_size=4096 && npm install && hexo clean && hexo generate --debug"
+  command = "npm install && npm install hexo-butterfly-extensions hexo-generator-category && hexo clean && hexo generate"
 
 [build.environment]
   NODE_VERSION = "18"
+  WALINE_SERVER_URL = "您的Waline服务地址"
+  PARTICLES_COLOR = "#42b983"
 
 [build.processing]
   skip_processing = false

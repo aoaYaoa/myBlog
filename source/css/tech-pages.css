@@ -1,0 +1,83 @@
+/* 技术专题页面样式 */
+.tech-page {
+  .page-header {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255,255,255,0.9);
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .article-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+}
+
+/* 技术专题增强样式 */
+.tech-page {
+  .page-header {
+    background: linear-gradient(135deg, #6B48FF 0%, #00A3FF 100%);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+    h1 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+  }
+
+  .tag-plugin.tabs {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    .tab-item.active {
+      background: var(--theme-color);
+      color: white;
+    }
+  }
+
+  .tag-plugin.note {
+    border-left: 4px solid var(--theme-color);
+  }
+}
+
+/* 折叠组件增强样式 */
+.folding-container {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.folding-title {
+  background: rgba(0, 188, 212, 0.1);
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.folding-title:hover {
+  background: rgba(0, 188, 212, 0.15);
+}
+
+.folding-title i {
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.folding-title[open] i {
+  transform: rotate(180deg);
+}
+
+.folding-content {
+  padding: 20px;
+  background: rgba(249, 249, 249, 0.8);
+  border-left: 3px solid #00bcd4;
+}
