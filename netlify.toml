@@ -5,7 +5,7 @@
 
 [build]
   publish = "public"
-  command = "npm install && npm install hexo-butterfly-extensions hexo-generator-category && hexo clean && hexo generate"
+  command = "npm install && npm install  hexo-generator-category && hexo clean && hexo generate"
 
 [build.environment]
   NODE_VERSION = "18"
