@@ -6,11 +6,9 @@ categories:
 tags:
   - Hexo
   - 入门
-cover: /img/posts/hello.jpg
+cover: /img/qiankun.jpg
 ---
 # Qiankun 微前端企业级实践指南
-
-![微前端架构示意图](https://example.com/micro-frontend-arch.png)
 
 ## 目录
 1. [基础配置](#一基础配置)

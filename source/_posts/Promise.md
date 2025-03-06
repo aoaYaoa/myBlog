@@ -6,7 +6,7 @@ categories:
 tags:
   - Promise
   - 入门
-cover: /img/posts/hello.jpg
+cover: /img/promise.png
 ---
 # 深入理解 JavaScript Promise：从入门到精通
 ## 前言
