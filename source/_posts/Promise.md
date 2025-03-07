@@ -1,6 +1,6 @@
 ---
 title: 深入理解Promise
-date: 2023-01-01
+date: 2024-12-13
 categories:
   - 教程
 tags:

@@ -1,6 +1,6 @@
 ---
-title: Qiankun 微前前端的使用
-date: 2023-01-01
+title: Qiankun 微前端的使用
+date: 2024-04-08
 categories:
   - 教程
 tags:
