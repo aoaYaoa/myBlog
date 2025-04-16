@@ -580,8 +580,8 @@ comments:
   # Format of two comments system : Disqus,Waline
   use: 
   #  - Livere
-  #  - Gitalk
-     - Twikoo
+   - Gitalk
+    #  - Twikoo
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
