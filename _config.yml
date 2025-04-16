@@ -127,9 +127,9 @@ search:
   format: html
 
 # APlayer配置 (删除或注释掉这部分)
-# aplayer:
-#   meting: true
-#   asset_inject: true
+aplayer:
+  meting: true
+  asset_inject: false
 
 # 确保此项设置为utf-8
 charset: utf-8

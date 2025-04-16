@@ -556,7 +556,8 @@ comments:
   # Leave it empty if you don't need comments
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
-  use:
+  use: 
+   - Livere
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -584,7 +585,7 @@ disqusjs:
 # Livere
 # https://www.livere.com/
 livere:
-  uid:
+  uid: MTAyMC82MDU3OC8zNzA0OQ==
 
 # Gitalk
 # https://github.com/gitalk/gitalk
@@ -1003,14 +1004,18 @@ note:
 
 # https://github.com/MoOx/pjax
 pjax:
-  enable: false
+  enable: true
   # Exclude the specified pages from pjax, such as '/music/'
-  exclude:
+  exclude: true
     # - /xxxxxx/
 
 # Inject the css and script (aplayer/meting)
 aplayerInject:
-  enable: false  # 关闭自动注入
+  enable: true  # 关闭自动注入
+  per_page: true  # 仅在文章页注入
+  page: true  # 仅在页面注入
+  
+
 
 # Snackbar - Toast Notification
 # https://github.com/polonel/SnackBar
@@ -1098,7 +1103,10 @@ inject:
     # - <link rel="stylesheet" href="/css/custom.css">
   bottom:
     # - <script src="/js/custom.js"></script>
+    # - <div class="aplayer" data-id="000PeZCQ1i4XVs" data-server="tencent" data-type="artist" data-mutex="true" data-preload="auto" data-theme="#3F51B5"></div>
+    - <div class="aplayer no-destroy" data-id="13528716738" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true"> </div>
     - <script src="/js/resources.js"></script>
+     
 
 # 修改这一部分来使用自定义文件
 # 通过这个设置，主题会自动加载source/_data/style.css文件内容
