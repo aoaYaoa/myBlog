@@ -58,6 +58,9 @@ menu:
   # 电影: movies || fab fa-film
   日常||fas fa-calendar-alt:
     生活: /artitalk/ || fas fa-comment 
+    说说: /shuoshuo/ || fas fa-comment-dots
+    吐槽: /twikoo/ || fas fa-comment-dots
+    
   
   资源: /resources/ || fas fa-compass
   
@@ -576,8 +579,8 @@ comments:
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
   use: 
+  #  - Livere
    - Gitalk
-   - Utterances
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -645,7 +648,7 @@ waline:
 # Utterances
 # https://utteranc.es/
 utterances:
-  repo: aoaYaoa/hexo-comments
+  repo:
   # Issue Mapping: pathname/url/title/og:title
   issue_term: pathname
   # Theme: github-light/github-dark/github-dark-orange/icy-dark/dark-blue/photon-dark
@@ -668,9 +671,8 @@ facebook_comments:
 # Twikoo
 # https://github.com/imaegoo/twikoo
 twikoo:
-  envId:
-  region:
-  # Use Twikoo visitor count as the page view count
+  envId: # 腾讯云环境填 envId；Vercel 环境填地址（https://xxx.vercel.app）
+  region: # 环境地域，默认为 ap-shanghai，腾讯云环境填 ap-shanghai 或 ap-guangzhou；Vercel 环境不填
   visitor: false
   option:
 

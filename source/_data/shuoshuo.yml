@@ -1,0 +1,11 @@
+- author: Butterfly
+  avatar: https://cdn.jsdelivr.net/gh/aoaYaoa/picGo_images/img/avatar.jpg
+  date: 2024-06-21 23:33:26
+  key: key-1
+  content: |
+    This is a sample content for **Author 1**.
+    ![Sample Image](https://cdn.pixabay.com/photo/2022/04/10/15/11/greylag-goose-7123574_1280.jpg)
+  tags:
+    - tags1
+    - tags2
+
