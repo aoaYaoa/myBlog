@@ -46,15 +46,21 @@ nav:
 menu:
   首页: / || fas fa-home
   文章: /archives/ || fas fa-book-open
-  前端||fab fa-html5:
-    JS: /front-end/basic/ || fas fa-code
-    Vue: /front-end/vue/ || fab fa-vuejs
-    React: /front-end/react/ || fab fa-react
-    Flutter: /front-end/flutter/ || fas fa-mobile-alt
-  后端||fas fa-server:
-    Node.js: /back-end/nodejs/ || fab fa-node-js
-    Go: /back-end/go/ || fab fa-golang
+  # 前端||fab fa-html5:
+  #   JS: /front-end/basic/ || fas fa-code
+  #   Vue: /front-end/vue/ || fab fa-vuejs
+  #   React: /front-end/react/ || fab fa-react
+  #   Flutter: /front-end/flutter/ || fas fa-mobile-alt
+  # 后端||fas fa-server:
+  #   Node.js: /back-end/nodejs/ || fab fa-node-js
+  #   Go: /back-end/go/ || fab fa-golang
+  
+  # 电影: movies || fab fa-film
+  日常||fas fa-calendar-alt:
+    生活: /artitalk/ || fas fa-comment 
+  
   资源: /resources/ || fas fa-compass
+  
   关于: /about/ || fas fa-user
 
 # --------------------------------------
@@ -113,9 +119,9 @@ code_blocks:
 # Formal:
 #   icon: link || the description || color
 social:
-  fab fa-github: https://github.com/yourname || GitHub || '#181717'
+  fab fa-github: https://github.com/aoaYaoa || GitHub || '#181717'
   fab fa-twitter: https://twitter.com/yourname || Twitter || '#1DA1F2'
-  fas fa-envelope: mailto:your@email.com || Email || '#EA4335'
+  fas fa-envelope: skyeeq9@gmail.com || Email || '#EA4335'
 
 # --------------------------------------
 # Image Settings
@@ -386,6 +392,11 @@ aside:
   card_author:
     enable: true
     description: 个人博客，记录成长点滴...
+    button:
+      enable: true
+      icon: fab fa-github
+      text: Follow Me
+      link: https://github.com/aoaYaoa
   card_announcement:
     enable: true
     content: 欢迎来到我的博客，这里分享技术和生活的点滴！
@@ -406,6 +417,14 @@ aside:
     limit: 8
   card_webinfo:
     enable: true
+    post_count: true
+    last_push_date: true
+    sort_order:
+    # Time difference between publish date and now
+    # Formal: Month/Day/Year Time or Year/Month/Day Time
+    # Leave it empty if you don't enable this feature
+    runtime_date:
+
   # 自定义小部件区域
   card_custom:
     - class_name: card-music
@@ -484,12 +503,12 @@ copy:
   enable: true
   # Add the copyright information after copied content
   copyright:
-    enable: false
+    enable: true
     limit_count: 150
 
 # Need to install the hexo-wordcount plugin
 wordcount:
-  enable: false
+  enable: true
   # Display the word count of the article in post meta
   post_wordcount: true
   # Display the time to read the article in post meta
@@ -557,7 +576,8 @@ comments:
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
   use: 
-   - Livere
+  #  - Livere
+   - Gitalk
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -590,12 +610,14 @@ livere:
 # Gitalk
 # https://github.com/gitalk/gitalk
 gitalk:
-  client_id:
-  client_secret:
-  repo:
-  owner:
-  admin:
-  option:
+  enable: true
+  owner: aoaYaoa       # GitHub 用户名
+  repo: hexo-comments                # 评论仓库名
+  client_id: Ov23liY2ymYYtgsmUeoN          # 从 GitHub 获取
+  client_secret: 39a78717ca5710bb38b412fd5e1cd2106b5319c5  # 从 GitHub 获取
+  admin: aoaYaoa   # 仓库管理员
+  distractionFreeMode: false  # 关闭无干扰模式
+  proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token
 
 # Valine
 # https://valine.js.org
@@ -1099,13 +1121,15 @@ mobile:
 # --------------------------------------
 inject:
   head:
-    - <link rel="stylesheet" href="/css/base.css">
+    # - <link rel="stylesheet" href="/css/base.css">
+    - <script src="/js/resources.js"></script>
     # - <link rel="stylesheet" href="/css/custom.css">
   bottom:
+    
     # - <script src="/js/custom.js"></script>
     # - <div class="aplayer" data-id="000PeZCQ1i4XVs" data-server="tencent" data-type="artist" data-mutex="true" data-preload="auto" data-theme="#3F51B5"></div>
     - <div class="aplayer no-destroy" data-id="13528716738" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true"> </div>
-    - <script src="/js/resources.js"></script>
+    
      
 
 # 修改这一部分来使用自定义文件

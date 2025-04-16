@@ -23,9 +23,15 @@ importers:
       hexo:
         specifier: ^7.3.0
         version: 7.3.0(chokidar@3.6.0)
+      hexo-butterfly-artitalk:
+        specifier: 1.0.5
+        version: 1.0.5
       hexo-deployer-git:
         specifier: ^4.0.0
         version: 4.0.0(chokidar@3.6.0)
+      hexo-douban:
+        specifier: 2.3.6
+        version: 2.3.6
       hexo-filter-nofollow:
         specifier: 2.0.2
         version: 2.0.2
@@ -42,7 +48,7 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       hexo-generator-search:
-        specifier: ^2.4.3
+        specifier: ^2.4.0
         version: 2.4.3(chokidar@3.6.0)
       hexo-generator-searchdb:
         specifier: 1.4.1
@@ -108,6 +114,10 @@ packages:
     resolution: {integrity: sha512-81NWa1njQblgZbQHxWHpxxCzNsa3ZwvFqpUg7P+NNUU6f3UU2jBEg4OlF/J6rl8+PQGh1q6/zWScd001YwcA5A==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+
+  '@babel/runtime@7.27.0':
+    resolution: {integrity: sha512-VtPOkrdPHZsKc/clNqyi9WUA8TINkZ4cGk63UUE3u4pmB2k+ZMQRDuIOagv8UVd6j7k0T3+RRIb7beKTebNbcw==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/types@7.26.9':
     resolution: {integrity: sha512-Y3IR1cRnOxOCDvMmNiym7XpXQ93iGDDPHx+Zj+NM+rg0fBaShfQLkg+hKPaZCEvg5N/LeCo4+Rj/i3FuJsIQaw==}
@@ -1143,6 +1153,9 @@ packages:
     deprecated: Please see https://github.com/hexojs/hexo-bunyan/issues/17
     hasBin: true
 
+  hexo-butterfly-artitalk@1.0.5:
+    resolution: {integrity: sha512-YQTKdVdxFx+etRREaXsff1ecSrB1w+ZANsujprcGFs8XaC+jo9+G6ozFszVcKxKNBHxrsvij0TqS/KyUjJnu+w==}
+
   hexo-cli@4.3.2:
     resolution: {integrity: sha512-druJeBgLpG9ncDS5AhBHdAXk0G4CFj8Qes09pApyZ6bR+nJW1JYiDMuilhudaKDdq+1l49jWXVTidkcb7p0Jbw==}
     engines: {node: '>=14'}
@@ -1151,6 +1164,10 @@ packages:
   hexo-deployer-git@4.0.0:
     resolution: {integrity: sha512-28t1Q+4taB/UaBAP52W3mD/wcCwa2y2zBieUfBJFBZudbmVgiKJB5YedYILeyI5QByaUKAOwoupmdTbocdQ+CQ==}
     engines: {node: '>=14'}
+
+  hexo-douban@2.3.6:
+    resolution: {integrity: sha512-08XVaNcRz+gMsyp6fBQFHj27Fgwtp54H2XvyvXDPr6DbZWEcpTgc7x/Z+k9S80jdtQME5GqlohZub9wEf7s8PA==}
+    engines: {node: '>= 18'}
 
   hexo-filter-nofollow@2.0.2:
     resolution: {integrity: sha512-roIkEIkGOR22EPMoy8iKrufDoAH25LOT5ZeVXVLavEpM757Y96kfUhyathryMLXr326EURffgkZAKsVf3EDl0A==}
@@ -1163,6 +1180,10 @@ packages:
   hexo-fs@0.2.3:
     resolution: {integrity: sha512-rLB1rMVUW3csAljvJgHfyjemL0BrmcUZfBf9hJe6S0pA53igFa3ON0PFwomvoLs1Wdmjs9Awnw9Tru4PjWFSlQ==}
     engines: {node: '>=6.9.0'}
+
+  hexo-fs@4.1.1:
+    resolution: {integrity: sha512-aDysNTyv8ElcerbFVbPLRXnYt+QDY6gAOZZ5DLbCxudY0Ywppqd+uZ03gZ2BDypIBvmNB27WYWYz76M+Yv/YXw==}
+    engines: {node: '>=14'}
 
   hexo-fs@4.1.3:
     resolution: {integrity: sha512-Q92zQ5PlVDouvSWFLXQoFSTLIUIODikUJs2BfAXQglyOEjN1dOQn1Z5Nimk/7GHof17R5h/uObCQLnZAjzI2tg==}
@@ -1205,6 +1226,10 @@ packages:
 
   hexo-log@0.2.0:
     resolution: {integrity: sha512-fzoc+GQexxPPILTjoOQILnA3ZG2MFgqMBVel4xvJ11pXptw9+f97ynTgDAExXafyp9Nz2ChXRuqlCYgPtZSlxQ==}
+
+  hexo-log@3.2.0:
+    resolution: {integrity: sha512-fk7jOW3hvKiAv4Q/d8UxaQlARwcv+5KjGcnxexUrqBqyWbMCLmw7jhMHTSRLNNQpaoTlF5ff+kQkPi4yhp9iag==}
+    engines: {node: '>=12.4.0'}
 
   hexo-log@4.1.0:
     resolution: {integrity: sha512-i2Sgxk8Cgx5viSjq5qW5N/rBFfwoCKQcH8qnnW1fawCapcdEAhIsq+Y3vbrs9bssyDlyU6Vqm4oQmosREaNI7Q==}
@@ -1321,6 +1346,9 @@ packages:
     resolution: {integrity: sha512-rQLskxnM/5OCldHo+wNXbpVgDn5A17CUoKX+7Sokwaknlq7CdSnphy0W39GU8dw59XiCXmFXDg4fRuckQRKewQ==}
     engines: {node: '>=12.20.0'}
 
+  i18next@23.16.8:
+    resolution: {integrity: sha512-06r/TitrM88Mg5FdUXAKL96dJMzgqLE5dv3ryBAra4KCwD9mJ4ndOTS95ZuymIGoE+2hzfdaMak2X11/es7ZWg==}
+
   iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
@@ -1328,6 +1356,10 @@ packages:
   identifier-regex@1.0.0:
     resolution: {integrity: sha512-Rcy5cjBOM9iTR+Vwy0Llyip9u0cA99T1yiWOhDW/+PDaTQhyski0tMovsipQ/FRNDkudjLWusJ/IMVIlG5WZnQ==}
     engines: {node: '>=18'}
+
+  idouban@1.1.3:
+    resolution: {integrity: sha512-/h/DZL8w+t3DaVabdtPq2mYGqx+eDNn09LmNARYmN/WxPmjhd2Nidcoonz0EXdOZSlRYdOolOIOOGt+/il98sg==}
+    engines: {node: '>= 18'}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -1575,6 +1607,9 @@ packages:
   js-stringify@1.0.2:
     resolution: {integrity: sha512-rtS5ATOo2Q5k1G+DADISilDA6lv79zIiwFd6CcjuIxGKLFm5C+RLImRscVap9k55i+MOZwgliw+NejvkLuGD5g==}
 
+  js-tokens@4.0.0:
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+
   js-yaml-js-types@1.0.1:
     resolution: {integrity: sha512-5tpfyORs8OQ43alNERbWfYRCtWgykvzYgY46fUhrQi2+kS7N0NuuFYLZ/IrfmVm5muLTndeMublgraXiFRjEPw==}
     peerDependencies:
@@ -1621,6 +1656,10 @@ packages:
   kind-of@6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
+
+  loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
 
   lower-case@2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
@@ -2146,6 +2185,15 @@ packages:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
 
+  react-dom@18.3.1:
+    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
+    peerDependencies:
+      react: ^18.3.1
+
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+    engines: {node: '>=0.10.0'}
+
   readable-stream@2.3.8:
     resolution: {integrity: sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==}
 
@@ -2166,6 +2214,9 @@ packages:
 
   regenerator-runtime@0.11.1:
     resolution: {integrity: sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==}
+
+  regenerator-runtime@0.14.1:
+    resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
 
   regex-cache@0.4.4:
     resolution: {integrity: sha512-nVIZwtCjkC9YgvWkpM55B5rBhBYRZhAaJbgcFYXXsHnbZ9UZI9nnVWYZpBlCqv9ho2eZryPnWrZGsOdPwVWXWQ==}
@@ -2257,6 +2308,9 @@ packages:
   saxes@6.0.0:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
     engines: {node: '>=v12.22.7'}
+
+  scheduler@0.23.2:
+    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
   seek-bzip@1.0.6:
     resolution: {integrity: sha512-e1QtP3YL5tWww8uKaOCQ18UxIT2laNBXHjV/S2WYCiK4udiv8lkG89KRIoCjUagnAmCBurjF4zEVX2ByBbnCjQ==}
@@ -2715,6 +2769,10 @@ snapshots:
   '@babel/parser@7.26.9':
     dependencies:
       '@babel/types': 7.26.9
+
+  '@babel/runtime@7.27.0':
+    dependencies:
+      regenerator-runtime: 0.14.1
 
   '@babel/types@7.26.9':
     dependencies:
@@ -4017,6 +4075,10 @@ snapshots:
       mv: 2.1.1
       safe-json-stringify: 1.2.0
 
+  hexo-butterfly-artitalk@1.0.5:
+    dependencies:
+      pug: 3.0.3
+
   hexo-cli@4.3.2:
     dependencies:
       abbrev: 2.0.0
@@ -4041,6 +4103,12 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
+  hexo-douban@2.3.6:
+    dependencies:
+      hexo-fs: 4.1.1
+      hexo-log: 3.2.0
+      idouban: 1.1.3
+
   hexo-filter-nofollow@2.0.2: {}
 
   hexo-front-matter@4.2.1:
@@ -4055,6 +4123,13 @@ snapshots:
       graceful-fs: 4.2.11
     transitivePeerDependencies:
       - supports-color
+
+  hexo-fs@4.1.1:
+    dependencies:
+      bluebird: 3.7.2
+      chokidar: 3.6.0
+      graceful-fs: 4.2.11
+      hexo-util: 2.7.0
 
   hexo-fs@4.1.3:
     dependencies:
@@ -4115,6 +4190,10 @@ snapshots:
     dependencies:
       chalk: 1.1.3
       hexo-bunyan: 1.0.0
+
+  hexo-log@3.2.0:
+    dependencies:
+      picocolors: 1.1.1
 
   hexo-log@4.1.0:
     dependencies:
@@ -4317,6 +4396,10 @@ snapshots:
   human-signals@3.0.1:
     optional: true
 
+  i18next@23.16.8:
+    dependencies:
+      '@babel/runtime': 7.27.0
+
   iconv-lite@0.6.3:
     dependencies:
       safer-buffer: 2.1.2
@@ -4324,6 +4407,12 @@ snapshots:
   identifier-regex@1.0.0:
     dependencies:
       reserved-identifiers: 1.0.0
+
+  idouban@1.1.3:
+    dependencies:
+      i18next: 23.16.8
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   ieee754@1.2.1: {}
 
@@ -4560,6 +4649,8 @@ snapshots:
 
   js-stringify@1.0.2: {}
 
+  js-tokens@4.0.0: {}
+
   js-yaml-js-types@1.0.1(js-yaml@4.1.0):
     dependencies:
       esprima: 4.0.1
@@ -4623,6 +4714,10 @@ snapshots:
       is-buffer: 1.1.6
 
   kind-of@6.0.3: {}
+
+  loose-envify@1.4.0:
+    dependencies:
+      js-tokens: 4.0.0
 
   lower-case@2.0.2:
     dependencies:
@@ -5194,6 +5289,16 @@ snapshots:
 
   range-parser@1.2.1: {}
 
+  react-dom@18.3.1(react@18.3.1):
+    dependencies:
+      loose-envify: 1.4.0
+      react: 18.3.1
+      scheduler: 0.23.2
+
+  react@18.3.1:
+    dependencies:
+      loose-envify: 1.4.0
+
   readable-stream@2.3.8:
     dependencies:
       core-util-is: 1.0.3
@@ -5225,6 +5330,8 @@ snapshots:
   regenerator-runtime@0.10.5: {}
 
   regenerator-runtime@0.11.1: {}
+
+  regenerator-runtime@0.14.1: {}
 
   regex-cache@0.4.4:
     dependencies:
@@ -5304,6 +5411,10 @@ snapshots:
   saxes@6.0.0:
     dependencies:
       xmlchars: 2.2.0
+
+  scheduler@0.23.2:
+    dependencies:
+      loose-envify: 1.4.0
 
   seek-bzip@1.0.6:
     dependencies:

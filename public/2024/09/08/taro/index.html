@@ -1,0 +1,818 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Taro使用记录 | aoaYaoa</title><meta name="author" content="aoaYaoa"><meta name="copyright" content="aoaYaoa"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Deno学习记录 📘📱 Taro 学习总结Taro 是一个开放式跨端跨框架解决方案，助力开发者快速构建小程序、H5和原生应用 📑 目录 基础概念 项目结构 基础使用 小程序开发注意事项 常见问题与解决方案 小程序打包与发布 性能优化最佳实践 小程序特有功能 最佳实践   🔰 基础概念Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Taro使用记录">
+<meta property="og:url" content="https://aoayaoa.github.io/2024/09/08/taro/index.html">
+<meta property="og:site_name" content="aoaYaoa">
+<meta property="og:description" content="Deno学习记录 📘📱 Taro 学习总结Taro 是一个开放式跨端跨框架解决方案，助力开发者快速构建小程序、H5和原生应用 📑 目录 基础概念 项目结构 基础使用 小程序开发注意事项 常见问题与解决方案 小程序打包与发布 性能优化最佳实践 小程序特有功能 最佳实践   🔰 基础概念Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aoayaoa.github.io/img/taro.jpeg">
+<meta property="article:published_time" content="2024-09-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-16T04:30:22.713Z">
+<meta property="article:author" content="aoaYaoa">
+<meta property="article:tag" content="Taro">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aoayaoa.github.io/img/taro.jpeg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Taro使用记录",
+  "url": "https://aoayaoa.github.io/2024/09/08/taro/",
+  "image": "https://aoayaoa.github.io/img/taro.jpeg",
+  "datePublished": "2024-09-07T16:00:00.000Z",
+  "dateModified": "2025-04-16T04:30:22.713Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "aoaYaoa",
+      "url": "https://aoayaoa.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://aoayaoa.github.io/2024/09/08/taro/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Taro使用记录',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/base.css"><script src="/js/resources.js"></script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="aoaYaoa" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-book-open"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/resources/"><i class="fa-fw fas fa-compass"></i><span> 资源</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/taro.jpeg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/avatar.jpg" alt="Logo"><span class="site-name">aoaYaoa</span></a><a class="nav-page-title" href="/"><span class="site-name">Taro使用记录</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-book-open"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/resources/"><i class="fa-fw fas fa-compass"></i><span> 资源</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Taro使用记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-09-07T16:00:00.000Z" title="发表于 2024-09-08 00:00:00">2024-09-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-16T04:30:22.713Z" title="更新于 2025-04-16 12:30:22">2025-04-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Deno学习记录-📘"><a href="#Deno学习记录-📘" class="headerlink" title="Deno学习记录 📘"></a>Deno学习记录 📘</h1><h1 id="📱-Taro-学习总结"><a href="#📱-Taro-学习总结" class="headerlink" title="📱 Taro 学习总结"></a>📱 Taro 学习总结</h1><p>Taro 是一个开放式跨端跨框架解决方案，助力开发者快速构建小程序、H5和原生应用</p>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5">基础概念</a></li>
+<li><a href="#-%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84">项目结构</a></li>
+<li><a href="#-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8">基础使用</a></li>
+<li><a href="#-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9">小程序开发注意事项</a></li>
+<li><a href="#-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">常见问题与解决方案</a></li>
+<li><a href="#-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E4%B8%8E%E5%8F%91%E5%B8%83">小程序打包与发布</a></li>
+<li><a href="#-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">性能优化最佳实践</a></li>
+<li><a href="#-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%89%B9%E6%9C%89%E5%8A%9F%E8%83%BD">小程序特有功能</a></li>
+<li><a href="#-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">最佳实践</a></li>
+</ul>
+<hr>
+<h2 id="🔰-基础概念"><a href="#🔰-基础概念" class="headerlink" title="🔰 基础概念"></a>🔰 基础概念</h2><p>Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发小程序、H5、RN 等应用。</p>
+<hr>
+<h2 id="📂-项目结构"><a href="#📂-项目结构" class="headerlink" title="📂 项目结构"></a>📂 项目结构</h2><p>一个典型的 Taro 项目结构：</p>
+<table>
+<thead>
+<tr>
+<th align="left">目录/文件</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">📁 <code>config/</code></td>
+<td align="left">项目编译配置目录</td>
+</tr>
+<tr>
+<td align="left">📁 <code>src/</code></td>
+<td align="left">源码目录</td>
+</tr>
+<tr>
+<td align="left">├─ 📄 <code>app.config.ts</code></td>
+<td align="left">全局配置文件</td>
+</tr>
+<tr>
+<td align="left">├─ 📄 <code>app.ts</code></td>
+<td align="left">入口文件</td>
+</tr>
+<tr>
+<td align="left">├─ 📄 <code>app.scss</code></td>
+<td align="left">全局样式文件</td>
+</tr>
+<tr>
+<td align="left">├─ 📁 <code>pages/</code></td>
+<td align="left">页面文件目录</td>
+</tr>
+<tr>
+<td align="left">├─ 📁 <code>components/</code></td>
+<td align="left">组件目录</td>
+</tr>
+<tr>
+<td align="left">├─ 📁 <code>assets/</code></td>
+<td align="left">静态资源目录</td>
+</tr>
+<tr>
+<td align="left">├─ 📁 <code>utils/</code></td>
+<td align="left">工具函数目录</td>
+</tr>
+<tr>
+<td align="left">├─ 📁 <code>stores/</code></td>
+<td align="left">状态管理目录</td>
+</tr>
+<tr>
+<td align="left">└─ 📁 <code>services/</code></td>
+<td align="left">服务接口目录</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🚀-基础使用"><a href="#🚀-基础使用" class="headerlink" title="🚀 基础使用"></a>🚀 基础使用</h2><h3 id="1️⃣-项目创建和启动"><a href="#1️⃣-项目创建和启动" class="headerlink" title="1️⃣ 项目创建和启动"></a>1️⃣ 项目创建和启动</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 Taro CLI</span></span><br><span class="line">npm install -g @tarojs/cli</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建项目</span></span><br><span class="line">taro init myApp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开发微信小程序</span></span><br><span class="line">npm run dev:weapp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打包微信小程序</span></span><br><span class="line">npm run build:weapp</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2️⃣-配置文件"><a href="#2️⃣-配置文件" class="headerlink" title="2️⃣ 配置文件"></a>2️⃣ 配置文件</h3><p><code>app.config.ts</code> 用于项目全局配置：</p>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// 页面路径列表</span></span><br><span class="line">  <span class="attr">pages</span>: [</span><br><span class="line">    <span class="string">'pages/home/index'</span>,</span><br><span class="line">    <span class="string">'pages/mine/index'</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// 全局窗口配置</span></span><br><span class="line">  <span class="attr">window</span>: {</span><br><span class="line">    <span class="attr">backgroundTextStyle</span>: <span class="string">'light'</span>,</span><br><span class="line">    <span class="attr">navigationBarBackgroundColor</span>: <span class="string">'#fff'</span>,</span><br><span class="line">    <span class="attr">navigationBarTitleText</span>: <span class="string">'WeChat'</span>,</span><br><span class="line">    <span class="attr">navigationBarTextStyle</span>: <span class="string">'black'</span></span><br><span class="line">  },</span><br><span class="line">  <span class="comment">// 底部 TabBar 配置</span></span><br><span class="line">  <span class="attr">tabBar</span>: {</span><br><span class="line">    <span class="attr">color</span>: <span class="string">'#999'</span>,</span><br><span class="line">    <span class="attr">selectedColor</span>: <span class="string">'#dc2743'</span>,</span><br><span class="line">    <span class="attr">backgroundColor</span>: <span class="string">'#fff'</span>,</span><br><span class="line">    <span class="attr">list</span>: [</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">pagePath</span>: <span class="string">'pages/home/index'</span>,</span><br><span class="line">        <span class="attr">text</span>: <span class="string">'首页'</span>,</span><br><span class="line">        <span class="attr">iconPath</span>: <span class="string">'./assets/images/home.png'</span>,</span><br><span class="line">        <span class="attr">selectedIconPath</span>: <span class="string">'./assets/images/home-active.png'</span></span><br><span class="line">      },</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">pagePath</span>: <span class="string">'pages/mine/index'</span>,</span><br><span class="line">        <span class="attr">text</span>: <span class="string">'我的'</span>,</span><br><span class="line">        <span class="attr">iconPath</span>: <span class="string">'./assets/images/mine.png'</span>,</span><br><span class="line">        <span class="attr">selectedIconPath</span>: <span class="string">'./assets/images/mine-active.png'</span></span><br><span class="line">      }</span><br><span class="line">    ]</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3️⃣-应用入口"><a href="#3️⃣-应用入口" class="headerlink" title="3️⃣ 应用入口"></a>3️⃣ 应用入口</h3><p><code>app.ts</code> 是应用入口文件：</p>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> { createApp } <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> { createPinia } <span class="keyword">from</span> <span class="string">'pinia'</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./app.scss'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建应用实例</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">App</span> = <span class="title function_">createApp</span>({</span><br><span class="line">  <span class="title function_">onLaunch</span>(<span class="params"></span>) {</span><br><span class="line">    <span class="comment">// 应用启动时触发</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'App launched'</span>)</span><br><span class="line">  },</span><br><span class="line">  <span class="title function_">onShow</span>(<span class="params">options</span>) {</span><br><span class="line">    <span class="comment">// 应用显示时触发</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'App shown'</span>, options)</span><br><span class="line">  }</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用状态管理</span></span><br><span class="line"><span class="keyword">const</span> pinia = <span class="title function_">createPinia</span>()</span><br><span class="line"><span class="title class_">App</span>.<span class="title function_">use</span>(pinia)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">App</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4️⃣-页面开发"><a href="#4️⃣-页面开发" class="headerlink" title="4️⃣ 页面开发"></a>4️⃣ 页面开发</h3><p>每个页面通常包含三个文件：</p>
+<ul>
+<li><code>index.vue</code> - 页面组件</li>
+<li><code>index.scss</code> - 页面样式</li>
+<li><code>index.config.ts</code> - 页面配置</li>
+</ul>
+<p><strong>页面组件示例（Vue3）：</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;view class="page"&gt;</span><br><span class="line">    &lt;text&gt;{{ message }}&lt;/text&gt;</span><br><span class="line">    &lt;button @tap="handleClick"&gt;点击我&lt;/button&gt;</span><br><span class="line">  &lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup lang="ts"&gt;</span><br><span class="line">import { ref } from 'vue'</span><br><span class="line">import Taro from '@tarojs/taro'</span><br><span class="line"></span><br><span class="line">const message = ref('Hello World')</span><br><span class="line"></span><br><span class="line">const handleClick = () =&gt; {</span><br><span class="line">  Taro.showToast({</span><br><span class="line">    title: '点击成功',</span><br><span class="line">    icon: 'success'</span><br><span class="line">  })</span><br><span class="line">}</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style lang="scss"&gt;</span><br><span class="line">.page {</span><br><span class="line">  padding: 20px;</span><br><span class="line">}</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>页面配置示例：</strong></p>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="attr">navigationBarTitleText</span>: <span class="string">'页面标题'</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="⚠️-小程序开发注意事项"><a href="#⚠️-小程序开发注意事项" class="headerlink" title="⚠️ 小程序开发注意事项"></a>⚠️ 小程序开发注意事项</h2><h3 id="📌-生命周期"><a href="#📌-生命周期" class="headerlink" title="📌 生命周期"></a>📌 生命周期</h3><h4 id="Taro-框架生命周期："><a href="#Taro-框架生命周期：" class="headerlink" title="Taro 框架生命周期："></a>Taro 框架生命周期：</h4><table>
+<thead>
+<tr>
+<th align="left">生命周期</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">🔄 <code>onLaunch</code></td>
+<td align="left">应用初始化</td>
+</tr>
+<tr>
+<td align="left">👁️ <code>onShow</code></td>
+<td align="left">应用显示</td>
+</tr>
+<tr>
+<td align="left">🙈 <code>onHide</code></td>
+<td align="left">应用隐藏</td>
+</tr>
+<tr>
+<td align="left">❌ <code>onError</code></td>
+<td align="left">应用发生错误</td>
+</tr>
+</tbody></table>
+<h4 id="页面生命周期："><a href="#页面生命周期：" class="headerlink" title="页面生命周期："></a>页面生命周期：</h4><table>
+<thead>
+<tr>
+<th align="left">生命周期</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">📥 <code>onLoad</code></td>
+<td align="left">页面加载</td>
+</tr>
+<tr>
+<td align="left">✅ <code>onReady</code></td>
+<td align="left">页面初次渲染完成</td>
+</tr>
+<tr>
+<td align="left">👁️ <code>onShow</code></td>
+<td align="left">页面显示</td>
+</tr>
+<tr>
+<td align="left">🙈 <code>onHide</code></td>
+<td align="left">页面隐藏</td>
+</tr>
+<tr>
+<td align="left">📤 <code>onUnload</code></td>
+<td align="left">页面卸载</td>
+</tr>
+<tr>
+<td align="left">⬇️ <code>onPullDownRefresh</code></td>
+<td align="left">下拉刷新</td>
+</tr>
+<tr>
+<td align="left">⬆️ <code>onReachBottom</code></td>
+<td align="left">上拉触底</td>
+</tr>
+<tr>
+<td align="left">📜 <code>onPageScroll</code></td>
+<td align="left">页面滚动</td>
+</tr>
+<tr>
+<td align="left">📤 <code>onShareAppMessage</code></td>
+<td align="left">用户点击右上角分享</td>
+</tr>
+</tbody></table>
+<h4 id="组合式-API-中使用生命周期："><a href="#组合式-API-中使用生命周期：" class="headerlink" title="组合式 API 中使用生命周期："></a>组合式 API 中使用生命周期：</h4><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> { onMounted, onUnmounted } <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> { useDidShow, useDidHide } <span class="keyword">from</span> <span class="string">'@tarojs/taro'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Vue 生命周期</span></span><br><span class="line"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'组件挂载'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'组件卸载'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="comment">// Taro 页面生命周期</span></span><br><span class="line"><span class="title function_">useDidShow</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'页面显示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="title function_">useDidHide</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'页面隐藏'</span>)</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📌-路由与导航"><a href="#📌-路由与导航" class="headerlink" title="📌 路由与导航"></a>📌 路由与导航</h3><p>Taro 导航 API：</p>
+<table>
+<thead>
+<tr>
+<th align="left">API</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">🔀 <code>Taro.navigateTo</code></td>
+<td align="left">保留当前页面，跳转到应用内的某个页面</td>
+</tr>
+<tr>
+<td align="left">🔄 <code>Taro.redirectTo</code></td>
+<td align="left">关闭当前页面，跳转到应用内的某个页面</td>
+</tr>
+<tr>
+<td align="left">📑 <code>Taro.switchTab</code></td>
+<td align="left">跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面</td>
+</tr>
+<tr>
+<td align="left">◀️ <code>Taro.navigateBack</code></td>
+<td align="left">关闭当前页面，返回上一页面或多级页面</td>
+</tr>
+<tr>
+<td align="left">🔃 <code>Taro.reLaunch</code></td>
+<td align="left">关闭所有页面，打开到应用内的某个页面</td>
+</tr>
+</tbody></table>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例用法</span></span><br><span class="line"><span class="title class_">Taro</span>.<span class="title function_">navigateTo</span>({</span><br><span class="line">  <span class="attr">url</span>: <span class="string">'/pages/detail/index?id=123'</span></span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📌-状态管理"><a href="#📌-状态管理" class="headerlink" title="📌 状态管理"></a>📌 状态管理</h3><p><strong>Pinia (Vue3)：</strong></p>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 store</span></span><br><span class="line"><span class="keyword">import</span> { defineStore } <span class="keyword">from</span> <span class="string">'pinia'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useCounterStore = <span class="title function_">defineStore</span>(<span class="string">'counter'</span>, {</span><br><span class="line">  <span class="attr">state</span>: <span class="function">() =&gt;</span> ({</span><br><span class="line">    <span class="attr">count</span>: <span class="number">0</span></span><br><span class="line">  }),</span><br><span class="line">  <span class="attr">actions</span>: {</span><br><span class="line">    <span class="title function_">increment</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">count</span>++</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 store</span></span><br><span class="line"><span class="keyword">import</span> { useCounterStore } <span class="keyword">from</span> <span class="string">'../stores/counter'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> counterStore = <span class="title function_">useCounterStore</span>()</span><br><span class="line">counterStore.<span class="title function_">increment</span>()</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📌-数据存储"><a href="#📌-数据存储" class="headerlink" title="📌 数据存储"></a>📌 数据存储</h3><p>小程序数据存储 API：</p>
+<table>
+<thead>
+<tr>
+<th align="left">API</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">💾 <code>Taro.setStorage</code></td>
+<td align="left">异步存储数据</td>
+</tr>
+<tr>
+<td align="left">💾 <code>Taro.setStorageSync</code></td>
+<td align="left">同步存储数据</td>
+</tr>
+<tr>
+<td align="left">📂 <code>Taro.getStorage</code></td>
+<td align="left">异步获取数据</td>
+</tr>
+<tr>
+<td align="left">📂 <code>Taro.getStorageSync</code></td>
+<td align="left">同步获取数据</td>
+</tr>
+<tr>
+<td align="left">🗑️ <code>Taro.removeStorage</code></td>
+<td align="left">异步移除数据</td>
+</tr>
+<tr>
+<td align="left">🗑️ <code>Taro.removeStorageSync</code></td>
+<td align="left">同步移除数据</td>
+</tr>
+<tr>
+<td align="left">🧹 <code>Taro.clearStorage</code></td>
+<td align="left">清除所有数据</td>
+</tr>
+</tbody></table>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例用法</span></span><br><span class="line"><span class="title class_">Taro</span>.<span class="title function_">setStorageSync</span>(<span class="string">'token'</span>, <span class="string">'abc123'</span>)</span><br><span class="line"><span class="keyword">const</span> token = <span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'token'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📌-网络请求"><a href="#📌-网络请求" class="headerlink" title="📌 网络请求"></a>📌 网络请求</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本用法</span></span><br><span class="line"><span class="title class_">Taro</span>.<span class="title function_">request</span>({</span><br><span class="line">  <span class="attr">url</span>: <span class="string">'https://api.example.com/data'</span>,</span><br><span class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</span><br><span class="line">  <span class="attr">data</span>: { <span class="attr">id</span>: <span class="number">123</span> },</span><br><span class="line">  <span class="attr">header</span>: {</span><br><span class="line">    <span class="string">'content-type'</span>: <span class="string">'application/json'</span>,</span><br><span class="line">    <span class="string">'Authorization'</span>: <span class="string">'Bearer token'</span></span><br><span class="line">  },</span><br><span class="line">  <span class="attr">success</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'请求成功：'</span>, res.<span class="property">data</span>)</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">fail</span>: <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'请求失败：'</span>, err)</span><br><span class="line">  }</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="comment">// Promise 用法</span></span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title class_">Taro</span>.<span class="title function_">request</span>({</span><br><span class="line">    <span class="attr">url</span>: <span class="string">'https://api.example.com/data'</span></span><br><span class="line">  })</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'请求成功：'</span>, res.<span class="property">data</span>)</span><br><span class="line">} <span class="keyword">catch</span> (err) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'请求失败：'</span>, err)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📌-UI-组件使用"><a href="#📌-UI-组件使用" class="headerlink" title="📌 UI 组件使用"></a>📌 UI 组件使用</h3><p>Taro 内置基础组件：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;view class="container"&gt;</span><br><span class="line">    &lt;!-- 文本 --&gt;</span><br><span class="line">    &lt;text&gt;文本内容&lt;/text&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 按钮 --&gt;</span><br><span class="line">    &lt;button type="primary" @tap="handleClick"&gt;按钮&lt;/button&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 图片 --&gt;</span><br><span class="line">    &lt;image src="/assets/logo.png" mode="aspectFit" /&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 滚动视图 --&gt;</span><br><span class="line">    &lt;scroll-view scroll-y style="height: 300px"&gt;</span><br><span class="line">      &lt;view v-for="item in list" :key="item.id"&gt;{{ item.name }}&lt;/view&gt;</span><br><span class="line">    &lt;/scroll-view&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 表单组件 --&gt;</span><br><span class="line">    &lt;input type="text" v-model="inputValue" placeholder="请输入" /&gt;</span><br><span class="line">  &lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📌-小程序分享功能"><a href="#📌-小程序分享功能" class="headerlink" title="📌 小程序分享功能"></a>📌 小程序分享功能</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 页面内设置分享</span></span><br><span class="line"><span class="title class_">Taro</span>.<span class="title function_">useShareAppMessage</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">  <span class="keyword">return</span> {</span><br><span class="line">    <span class="attr">title</span>: <span class="string">'分享标题'</span>,</span><br><span class="line">    <span class="attr">path</span>: <span class="string">'/pages/home/index?share=true'</span>,</span><br><span class="line">    <span class="attr">imageUrl</span>: <span class="string">'/assets/share.png'</span></span><br><span class="line">  }</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="comment">// 分享到朋友圈</span></span><br><span class="line"><span class="title class_">Taro</span>.<span class="title function_">useShareTimeline</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">  <span class="keyword">return</span> {</span><br><span class="line">    <span class="attr">title</span>: <span class="string">'分享到朋友圈的标题'</span>,</span><br><span class="line">    <span class="attr">query</span>: <span class="string">'share=true'</span>,</span><br><span class="line">    <span class="attr">imageUrl</span>: <span class="string">'/assets/share.png'</span></span><br><span class="line">  }</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="🚫-易错点与开发陷阱"><a href="#🚫-易错点与开发陷阱" class="headerlink" title="🚫 易错点与开发陷阱"></a>🚫 易错点与开发陷阱</h2><h3 id="⛔-生命周期使用错误"><a href="#⛔-生命周期使用错误" class="headerlink" title="⛔ 生命周期使用错误"></a>⛔ 生命周期使用错误</h3><blockquote>
+<p>❌ <strong>不要在 <code>onLoad</code> 中使用 <code>useState</code> 等 hooks</strong><br>应在函数组件顶层使用</p>
+</blockquote>
+<blockquote>
+<p>❌ <strong>不要在 <code>onLoad</code> 中直接修改 data</strong><br>可能导致视图不更新</p>
+</blockquote>
+<blockquote>
+<p>❌ <strong>不要在小程序 App 的 <code>onLaunch</code> 里调用页面跳转相关的 API</strong></p>
+</blockquote>
+<h3 id="⛔-JSX-模板语法差异"><a href="#⛔-JSX-模板语法差异" class="headerlink" title="⛔ JSX/模板语法差异"></a>⛔ JSX/模板语法差异</h3><p>条件渲染：小程序不支持 <code>&amp;&amp;</code> 短路运算符条件渲染，应使用三元运算符</p>
+<figure class="highlight jsx"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ❌ 错误 */</span></span><br><span class="line">{ isShow &amp;&amp; <span class="language-xml"><span class="tag">&lt;<span class="name">View</span>&gt;</span>内容<span class="tag">&lt;/<span class="name">View</span>&gt;</span></span> }</span><br><span class="line">  </span><br><span class="line"><span class="comment">/* ✅ 正确 */</span></span><br><span class="line">{ isShow ? <span class="language-xml"><span class="tag">&lt;<span class="name">View</span>&gt;</span>内容<span class="tag">&lt;/<span class="name">View</span>&gt;</span></span> : <span class="literal">null</span> }</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="⛔-事件处理"><a href="#⛔-事件处理" class="headerlink" title="⛔ 事件处理"></a>⛔ 事件处理</h3><blockquote>
+<p>✅ <strong>事件名称使用小驼峰</strong>（onTap），而非原生小程序的连字符写法（bind:tap）<br>✅ <strong>阻止事件冒泡需使用 <code>stopPropagation</code></strong>，而非 <code>return false</code></p>
+</blockquote>
+<h3 id="⛔-样式问题"><a href="#⛔-样式问题" class="headerlink" title="⛔ 样式问题"></a>⛔ 样式问题</h3><blockquote>
+<p>❌ <strong>选择器错误</strong>：小程序不支持所有 CSS 选择器（如一些伪类选择器）<br>⚠️ <strong>样式隔离</strong>：页面样式会影响到组件，需注意作用域<br>⚠️ <strong>rpx 计算</strong>：设计稿尺寸非 750px 时，需要做等比例换算</p>
+</blockquote>
+<h3 id="⛔-API-使用误区"><a href="#⛔-API-使用误区" class="headerlink" title="⛔ API 使用误区"></a>⛔ API 使用误区</h3><blockquote>
+<p>⚠️ <code>Taro.navigateTo</code> 最多只能打开 10 层页面<br>⚠️ <code>Taro.setStorage</code> 存储的数据不能超过 10MB<br>⚠️ 微信小程序单个页面的逻辑层初始化耗时不能超过 20s</p>
+</blockquote>
+<hr>
+<h2 id="🛠️-常见问题与解决方案"><a href="#🛠️-常见问题与解决方案" class="headerlink" title="🛠️ 常见问题与解决方案"></a>🛠️ 常见问题与解决方案</h2><h3 id="🎨-样式问题"><a href="#🎨-样式问题" class="headerlink" title="🎨 样式问题"></a>🎨 样式问题</h3><ul>
+<li>Taro 中使用 <code>px</code> 单位会自动转换为小程序的 <code>rpx</code></li>
+<li>如需使用原生单位，可使用 <code>Px</code> 或 <code>PX</code></li>
+<li>推荐使用 SCSS/SASS 预处理器</li>
+</ul>
+<h3 id="🔄-平台差异处理"><a href="#🔄-平台差异处理" class="headerlink" title="🔄 平台差异处理"></a>🔄 平台差异处理</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Taro</span> <span class="keyword">from</span> <span class="string">'@tarojs/taro'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取当前环境</span></span><br><span class="line"><span class="keyword">const</span> env = <span class="title class_">Taro</span>.<span class="title function_">getEnv</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断平台</span></span><br><span class="line"><span class="keyword">if</span> (env === <span class="title class_">Taro</span>.<span class="property">ENV_TYPE</span>.<span class="property">WEAPP</span>) {</span><br><span class="line">  <span class="comment">// 微信小程序环境</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'当前是微信小程序环境'</span>)</span><br><span class="line">} <span class="keyword">else</span> <span class="keyword">if</span> (env === <span class="title class_">Taro</span>.<span class="property">ENV_TYPE</span>.<span class="property">ALIPAY</span>) {</span><br><span class="line">  <span class="comment">// 支付宝小程序环境</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'当前是支付宝小程序环境'</span>)</span><br><span class="line">} <span class="keyword">else</span> <span class="keyword">if</span> (env === <span class="title class_">Taro</span>.<span class="property">ENV_TYPE</span>.<span class="property">H5</span>) {</span><br><span class="line">  <span class="comment">// H5环境</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'当前是H5环境'</span>)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="⚡-性能优化"><a href="#⚡-性能优化" class="headerlink" title="⚡ 性能优化"></a>⚡ 性能优化</h3><ul>
+<li>避免频繁的数据更新导致不必要的渲染</li>
+<li>列表组件使用唯一且稳定的 key</li>
+<li>合理使用缓存机制</li>
+<li>按需加载资源</li>
+</ul>
+<h3 id="⏳-异步-API-的处理"><a href="#⏳-异步-API-的处理" class="headerlink" title="⏳ 异步 API 的处理"></a>⏳ 异步 API 的处理</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Promise 化</span></span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title class_">Taro</span>.<span class="title function_">showModal</span>({</span><br><span class="line">    <span class="attr">title</span>: <span class="string">'提示'</span>,</span><br><span class="line">    <span class="attr">content</span>: <span class="string">'确认删除？'</span></span><br><span class="line">  })</span><br><span class="line">  <span class="keyword">if</span> (res.<span class="property">confirm</span>) {</span><br><span class="line">    <span class="comment">// 用户点击确定</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">deleteItem</span>()</span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">showToast</span>({ <span class="attr">title</span>: <span class="string">'删除成功'</span> })</span><br><span class="line">  }</span><br><span class="line">} <span class="keyword">catch</span> (error) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'操作失败'</span>, error)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="📦-小程序打包与发布"><a href="#📦-小程序打包与发布" class="headerlink" title="📦 小程序打包与发布"></a>📦 小程序打包与发布</h2><h3 id="📱-分包配置"><a href="#📱-分包配置" class="headerlink" title="📱 分包配置"></a>📱 分包配置</h3><blockquote>
+<p>小程序有体积限制，主包最大 2MB，单个分包最大 2MB，总体积不超过 20MB</p>
+</blockquote>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="attr">pages</span>: [</span><br><span class="line">    <span class="string">'pages/index/index'</span>, <span class="comment">// 主包页面</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">subPackages</span>: [</span><br><span class="line">    {</span><br><span class="line">      <span class="attr">root</span>: <span class="string">'packageA'</span>, <span class="comment">// 分包根目录</span></span><br><span class="line">      <span class="attr">pages</span>: [</span><br><span class="line">        <span class="string">'pages/detail/index'</span>, <span class="comment">// 实际路径: packageA/pages/detail/index</span></span><br><span class="line">      ]</span><br><span class="line">    },</span><br><span class="line">    {</span><br><span class="line">      <span class="attr">root</span>: <span class="string">'packageB'</span>,</span><br><span class="line">      <span class="attr">name</span>: <span class="string">'pack2'</span>, <span class="comment">// 分包别名，可选</span></span><br><span class="line">      <span class="attr">pages</span>: [</span><br><span class="line">        <span class="string">'pages/list/index'</span>,</span><br><span class="line">      ]</span><br><span class="line">    }</span><br><span class="line">  ]</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📊-分包优化策略"><a href="#📊-分包优化策略" class="headerlink" title="📊 分包优化策略"></a>📊 分包优化策略</h3><table>
+<thead>
+<tr>
+<th align="left">策略</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">📋 <strong>按功能拆分</strong></td>
+<td align="left">将功能相近的页面放入同一分包</td>
+</tr>
+<tr>
+<td align="left">🔄 <strong>按访问频率拆分</strong></td>
+<td align="left">高频页面放主包，低频页面放分包</td>
+</tr>
+<tr>
+<td align="left">🔗 <strong>公共资源处理</strong></td>
+<td align="left">配置预加载规则提高体验</td>
+</tr>
+</tbody></table>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">preloadRule</span>: {</span><br><span class="line">    <span class="string">'pages/index/index'</span>: { <span class="comment">// 页面路径</span></span><br><span class="line">      <span class="attr">network</span>: <span class="string">'all'</span>, <span class="comment">// 在指定网络下预下载，all表示不限网络</span></span><br><span class="line">      <span class="attr">packages</span>: [<span class="string">'packageA'</span>] <span class="comment">// 进入页面后预下载分包</span></span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="🏞️-独立分包"><a href="#🏞️-独立分包" class="headerlink" title="🏞️ 独立分包"></a>🏞️ 独立分包</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">subPackages</span>: [</span><br><span class="line">    {</span><br><span class="line">      <span class="attr">root</span>: <span class="string">'independentPackage'</span>,</span><br><span class="line">      <span class="attr">pages</span>: [</span><br><span class="line">        <span class="string">'pages/independent/index'</span></span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">independent</span>: <span class="literal">true</span> <span class="comment">// 设置为独立分包</span></span><br><span class="line">    }</span><br><span class="line">  ]</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>独立分包特点：</strong></p>
+<ul>
+<li>✅ 不依赖主包即可运行</li>
+<li>✅ 适合广告页、活动页等临时页面</li>
+<li>✅ 可减少启动时加载时间</li>
+</ul>
+<h3 id="🔄-分包预加载"><a href="#🔄-分包预加载" class="headerlink" title="🔄 分包预加载"></a>🔄 分包预加载</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">preloadRule</span>: {</span><br><span class="line">    <span class="string">'pages/index/index'</span>: {</span><br><span class="line">      <span class="attr">network</span>: <span class="string">'all'</span>,</span><br><span class="line">      <span class="attr">packages</span>: [<span class="string">'packageA'</span>]</span><br><span class="line">    },</span><br><span class="line">    <span class="string">'packageA/pages/detail/index'</span>: {</span><br><span class="line">      <span class="attr">network</span>: <span class="string">'wifi'</span>, <span class="comment">// 仅在WiFi环境下预加载</span></span><br><span class="line">      <span class="attr">packages</span>: [<span class="string">'packageB'</span>]</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📉-包体积优化"><a href="#📉-包体积优化" class="headerlink" title="📉 包体积优化"></a>📉 包体积优化</h3><h4 id="🗜️-代码压缩"><a href="#🗜️-代码压缩" class="headerlink" title="🗜️ 代码压缩"></a>🗜️ 代码压缩</h4><figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/index.js</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = {</span><br><span class="line">  <span class="attr">mini</span>: {</span><br><span class="line">    <span class="comment">// 压缩配置</span></span><br><span class="line">    <span class="attr">optimizeMainPackage</span>: {</span><br><span class="line">      <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">    },</span><br><span class="line">    <span class="comment">// 混淆配置</span></span><br><span class="line">    <span class="title function_">webpackChain</span>(<span class="params">chain</span>) {</span><br><span class="line">      chain.<span class="property">optimization</span>.<span class="title function_">minimizer</span>(<span class="string">'terser'</span>)</span><br><span class="line">        .<span class="title function_">tap</span>(<span class="function"><span class="params">args</span> =&gt;</span> {</span><br><span class="line">          args[<span class="number">0</span>].<span class="property">terserOptions</span> = {</span><br><span class="line">            <span class="attr">compress</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">keep_classnames</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">keep_fnames</span>: <span class="literal">true</span></span><br><span class="line">          }</span><br><span class="line">          <span class="keyword">return</span> args</span><br><span class="line">        })</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="🖼️-资源优化"><a href="#🖼️-资源优化" class="headerlink" title="🖼️ 资源优化"></a>🖼️ 资源优化</h4><table>
+<thead>
+<tr>
+<th align="left">优化方式</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">🗜️ 压缩图片</td>
+<td align="left">使用 WebP 等高压缩比格式</td>
+</tr>
+<tr>
+<td align="left">☁️ CDN 加载</td>
+<td align="left">大图片放 CDN，通过网络加载</td>
+</tr>
+<tr>
+<td align="left">📝 使用图标字体</td>
+<td align="left">替代图片图标，减少体积</td>
+</tr>
+<tr>
+<td align="left">🔗 资源合并</td>
+<td align="left">减少网络请求数量</td>
+</tr>
+</tbody></table>
+<h4 id="📥-按需引入"><a href="#📥-按需引入" class="headerlink" title="📥 按需引入"></a>📥 按需引入</h4><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 错误：全量引入</span></span><br><span class="line"><span class="keyword">import</span> { <span class="title class_">Button</span>, <span class="title class_">Input</span>, <span class="title class_">Form</span> } <span class="keyword">from</span> <span class="string">'@tarojs/components'</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">// ✅ 正确：按需引入</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Button</span> <span class="keyword">from</span> <span class="string">'@tarojs/components/button'</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Input</span> <span class="keyword">from</span> <span class="string">'@tarojs/components/input'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="🚀-发布流程与审核"><a href="#🚀-发布流程与审核" class="headerlink" title="🚀 发布流程与审核"></a>🚀 发布流程与审核</h3><h4 id="📋-版本号管理"><a href="#📋-版本号管理" class="headerlink" title="📋 版本号管理"></a>📋 版本号管理</h4><p>遵循语义化版本规范（SemVer）</p>
+<h4 id="📝-提审材料准备"><a href="#📝-提审材料准备" class="headerlink" title="📝 提审材料准备"></a>📝 提审材料准备</h4><ul>
+<li>📋 完整的小程序功能介绍</li>
+<li>🔑 测试账号（如需登录）</li>
+<li>📜 相关资质材料</li>
+<li>📑 隐私协议和用户协议</li>
+</ul>
+<h4 id="⚠️-常见审核问题"><a href="#⚠️-常见审核问题" class="headerlink" title="⚠️ 常见审核问题"></a>⚠️ 常见审核问题</h4><ul>
+<li>❌ 诱导分享/评价</li>
+<li>❌ 不合规内容和功能</li>
+<li>❌ 个人信息收集不规范</li>
+<li>❌ UI与体验不符合平台规范</li>
+</ul>
+<h3 id="🔄-CI-CD-自动化发布"><a href="#🔄-CI-CD-自动化发布" class="headerlink" title="🔄 CI/CD 自动化发布"></a>🔄 CI/CD 自动化发布</h3><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .github/workflows/deploy.yml</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">Deploy</span> <span class="string">Mini</span> <span class="string">Program</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">main</span> ]</span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Use</span> <span class="string">Node.js</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/setup-node@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="string">'16'</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">ci</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build:weapp</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Upload</span> <span class="string">to</span> <span class="string">WeChat</span> <span class="string">DevTools</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">zhuowenli/taro-build-action@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">project-path:</span> <span class="string">'./dist'</span></span><br><span class="line">          <span class="attr">private-key:</span> <span class="string">${{</span> <span class="string">secrets.PRIVATE_KEY</span> <span class="string">}}</span></span><br><span class="line">          <span class="attr">private-key-id:</span> <span class="string">${{</span> <span class="string">secrets.PRIVATE_KEY_ID</span> <span class="string">}}</span></span><br><span class="line">          <span class="attr">upload-desc:</span> <span class="string">'Auto deploy from Github Actions'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="⚡-性能优化最佳实践"><a href="#⚡-性能优化最佳实践" class="headerlink" title="⚡ 性能优化最佳实践"></a>⚡ 性能优化最佳实践</h2><h3 id="🚀-启动性能优化"><a href="#🚀-启动性能优化" class="headerlink" title="🚀 启动性能优化"></a>🚀 启动性能优化</h3><table>
+<thead>
+<tr>
+<th align="left">优化方式</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">📦 精简主包</td>
+<td align="left">将非必要页面移至分包</td>
+</tr>
+<tr>
+<td align="left">🔄 预下载分包</td>
+<td align="left">提前加载可能需要的分包</td>
+</tr>
+<tr>
+<td align="left">⚡ 启用初始渲染缓存</td>
+<td align="left">提高页面显示速度</td>
+</tr>
+</tbody></table>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">window</span>: {</span><br><span class="line">    <span class="attr">initialRenderingCache</span>: <span class="string">'static'</span> <span class="comment">// 开启静态初始渲染缓存</span></span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="⏱️-运行时性能优化"><a href="#⏱️-运行时性能优化" class="headerlink" title="⏱️ 运行时性能优化"></a>⏱️ 运行时性能优化</h3><h4 id="🛑-避免不必要的渲染"><a href="#🛑-避免不必要的渲染" class="headerlink" title="🛑 避免不必要的渲染"></a>🛑 避免不必要的渲染</h4><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> { throttle } <span class="keyword">from</span> <span class="string">'../utils/tools'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 节流处理</span></span><br><span class="line"><span class="keyword">const</span> handleScroll = <span class="title function_">throttle</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">  <span class="comment">// 处理滚动逻辑</span></span><br><span class="line">}, <span class="number">200</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="📜-长列表优化"><a href="#📜-长列表优化" class="headerlink" title="📜 长列表优化"></a>📜 长列表优化</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;scroll-view </span><br><span class="line">  scroll-y </span><br><span class="line">  style="height: 500px"</span><br><span class="line">  virtual-item-height="50" </span><br><span class="line">  enableVirtualList&gt;</span><br><span class="line">  &lt;virtual-item v-for="item in list" :key="item.id"&gt;</span><br><span class="line">    {{ item.name }}</span><br><span class="line">  &lt;/virtual-item&gt;</span><br><span class="line">&lt;/scroll-view&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="🖼️-图片懒加载"><a href="#🖼️-图片懒加载" class="headerlink" title="🖼️ 图片懒加载"></a>🖼️ 图片懒加载</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;image lazy-load src="{{imageUrl}}" /&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="💀-骨架屏优化"><a href="#💀-骨架屏优化" class="headerlink" title="💀 骨架屏优化"></a>💀 骨架屏优化</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">initialRenderingCache</span>: {</span><br><span class="line">    <span class="attr">skeleton</span>: { <span class="comment">// 配置骨架屏</span></span><br><span class="line">      <span class="attr">mode</span>: <span class="string">'fullscreen'</span>, <span class="comment">// 全屏骨架屏</span></span><br><span class="line">      <span class="attr">source</span>: <span class="string">'native'</span>, <span class="comment">// 使用原生骨架屏</span></span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="🌐-网络请求优化"><a href="#🌐-网络请求优化" class="headerlink" title="🌐 网络请求优化"></a>🌐 网络请求优化</h3><table>
+<thead>
+<tr>
+<th align="left">优化方式</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">🔗 合并请求</td>
+<td align="left">减少请求次数</td>
+</tr>
+<tr>
+<td align="left">📋 请求队列</td>
+<td align="left">避免同时发起过多请求</td>
+</tr>
+<tr>
+<td align="left">⏱️ 超时与重试</td>
+<td align="left">合理设置请求超时和重试策略</td>
+</tr>
+<tr>
+<td align="left">🚀 HTTP/2</td>
+<td align="left">启用 HTTP/2 优化连接</td>
+</tr>
+</tbody></table>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Taro</span>.<span class="title function_">request</span>({</span><br><span class="line">  <span class="attr">url</span>: <span class="string">'https://api.example.com/data'</span>,</span><br><span class="line">  <span class="attr">enableHttp2</span>: <span class="literal">true</span>, <span class="comment">// 开启HTTP/2</span></span><br><span class="line">  <span class="attr">enableQuic</span>: <span class="literal">true</span>, <span class="comment">// 开启QUIC</span></span><br><span class="line">  <span class="attr">enableCache</span>: <span class="literal">true</span>, <span class="comment">// 开启缓存</span></span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="🔐-小程序特有功能"><a href="#🔐-小程序特有功能" class="headerlink" title="🔐 小程序特有功能"></a>🔐 小程序特有功能</h2><h3 id="🔑-小程序登录流程优化"><a href="#🔑-小程序登录流程优化" class="headerlink" title="🔑 小程序登录流程优化"></a>🔑 小程序登录流程优化</h3><h4 id="完整登录流程图"><a href="#完整登录流程图" class="headerlink" title="完整登录流程图"></a>完整登录流程图</h4><p><img src="/img/loading.gif" data-lazy-src="/img/taroLogin.png" srcset="/img/taroLogin.png 480w, /img/taroLogin.png 1200w" sizes="(max-width:600px) 100vw, 50vw"></p>
+<h4 id="登录流程说明"><a href="#登录流程说明" class="headerlink" title="登录流程说明"></a>登录流程说明</h4><ol>
+<li><p><strong>本地验证阶段</strong>：</p>
+<ul>
+<li>检查本地是否有登录凭证(token)</li>
+<li>若有token，验证其有效性</li>
+<li>若无token或token无效，进入微信登录流程</li>
+</ul>
+</li>
+<li><p><strong>获取凭证阶段</strong>：</p>
+<ul>
+<li>调用<code>Taro.login()</code>获取临时登录凭证code</li>
+<li>将code发送至应用服务器</li>
+</ul>
+</li>
+<li><p><strong>服务端身份验证</strong>：</p>
+<ul>
+<li>应用服务器携带code、appid和secret请求微信服务器</li>
+<li>微信服务器返回openid和session_key</li>
+<li>应用服务器根据openid查询用户是否存在</li>
+</ul>
+</li>
+<li><p><strong>用户处理阶段</strong>：</p>
+<ul>
+<li>若用户已存在：更新用户登录时间，生成新token</li>
+<li>若用户不存在：创建新用户记录，生成token</li>
+<li>将token和用户基本信息返回小程序前端</li>
+</ul>
+</li>
+<li><p><strong>登录完成阶段</strong>：</p>
+<ul>
+<li>小程序保存token到本地存储</li>
+<li>保存必要的用户信息</li>
+<li>更新应用的登录状态</li>
+<li>进入小程序主界面</li>
+</ul>
+</li>
+</ol>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><h5 id="前端实现（Taro）"><a href="#前端实现（Taro）" class="headerlink" title="前端实现（Taro）"></a>前端实现（Taro）</h5><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// login.ts</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Taro</span> <span class="keyword">from</span> <span class="string">'@tarojs/taro'</span></span><br><span class="line"><span class="keyword">import</span> { login <span class="keyword">as</span> apiLogin } <span class="keyword">from</span> <span class="string">'../services/auth'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 登录状态检查与登录流程</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">ensureLogin</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 1. 检查本地是否有有效的 token</span></span><br><span class="line">  <span class="keyword">const</span> token = <span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'token'</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (token) {</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">      <span class="comment">// 2. 验证 token 是否有效</span></span><br><span class="line">      <span class="keyword">const</span> checkResult = <span class="keyword">await</span> <span class="title function_">checkTokenValidity</span>(token)</span><br><span class="line">      <span class="keyword">if</span> (checkResult.<span class="property">valid</span>) {</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'token 有效，已登录'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">      }</span><br><span class="line">    } <span class="keyword">catch</span> (err) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'token 校验失败，需要重新登录'</span>)</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 3. token 无效或不存在，进行登录流程</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">await</span> <span class="title function_">wxLogin</span>()</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 微信登录流程</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">wxLogin</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">try</span> {</span><br><span class="line">    <span class="comment">// 显示加载提示</span></span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">showLoading</span>({ <span class="attr">title</span>: <span class="string">'登录中...'</span> })</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 4. 调用微信登录，获取 code</span></span><br><span class="line">    <span class="keyword">const</span> { code } = <span class="keyword">await</span> <span class="title class_">Taro</span>.<span class="title function_">login</span>()</span><br><span class="line">    <span class="keyword">if</span> (!code) {</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">'微信登录失败，获取 code 失败'</span>)</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 5. 将 code 发送给后端</span></span><br><span class="line">    <span class="keyword">const</span> loginResult = <span class="keyword">await</span> <span class="title function_">apiLogin</span>({ code })</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 6. 存储登录状态和用户信息</span></span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">setStorageSync</span>(<span class="string">'token'</span>, loginResult.<span class="property">token</span>)</span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">setStorageSync</span>(<span class="string">'userInfo'</span>, loginResult.<span class="property">userInfo</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 判断是否是新用户，如果是新用户可以引导完善资料</span></span><br><span class="line">    <span class="keyword">if</span> (loginResult.<span class="property">isNewUser</span>) {</span><br><span class="line">      <span class="title class_">Taro</span>.<span class="title function_">navigateTo</span>({ <span class="attr">url</span>: <span class="string">'/pages/user-profile/index'</span> })</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">hideLoading</span>()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  } <span class="keyword">catch</span> (error) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'登录失败'</span>, error)</span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">hideLoading</span>()</span><br><span class="line">    </span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">showToast</span>({</span><br><span class="line">      <span class="attr">title</span>: <span class="string">'登录失败，请重试'</span>,</span><br><span class="line">      <span class="attr">icon</span>: <span class="string">'none'</span></span><br><span class="line">    })</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验 token 有效性</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">checkTokenValidity</span>(<span class="params">token</span>) {</span><br><span class="line">  <span class="keyword">try</span> {</span><br><span class="line">    <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title class_">Taro</span>.<span class="title function_">request</span>({</span><br><span class="line">      <span class="attr">url</span>: <span class="string">'/api/auth/check-token'</span>,</span><br><span class="line">      <span class="attr">header</span>: {</span><br><span class="line">        <span class="string">'Authorization'</span>: <span class="string">`Bearer <span class="subst">${token}</span>`</span></span><br><span class="line">      }</span><br><span class="line">    })</span><br><span class="line">    <span class="keyword">return</span> { <span class="attr">valid</span>: res.<span class="property">data</span>.<span class="property">valid</span> }</span><br><span class="line">  } <span class="keyword">catch</span> (error) {</span><br><span class="line">    <span class="keyword">return</span> { <span class="attr">valid</span>: <span class="literal">false</span> }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h5 id="服务端实现（Node-js）"><a href="#服务端实现（Node-js）" class="headerlink" title="服务端实现（Node.js）"></a>服务端实现（Node.js）</h5><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// auth.controller.ts</span></span><br><span class="line"><span class="keyword">import</span> { <span class="title class_">Request</span>, <span class="title class_">Response</span> } <span class="keyword">from</span> <span class="string">'express'</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span></span><br><span class="line"><span class="keyword">import</span> jwt <span class="keyword">from</span> <span class="string">'jsonwebtoken'</span></span><br><span class="line"><span class="keyword">import</span> { <span class="title class_">User</span> } <span class="keyword">from</span> <span class="string">'../models/user.model'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 微信登录配置</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">WX_CONFIG</span> = {</span><br><span class="line">  <span class="attr">appId</span>: process.<span class="property">env</span>.<span class="property">WX_APP_ID</span>,</span><br><span class="line">  <span class="attr">appSecret</span>: process.<span class="property">env</span>.<span class="property">WX_APP_SECRET</span>,</span><br><span class="line">  <span class="attr">loginUrl</span>: <span class="string">'https://api.weixin.qq.com/sns/jscode2session'</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 登录接口</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">login</span>(<span class="params"><span class="attr">req</span>: <span class="title class_">Request</span>, <span class="attr">res</span>: <span class="title class_">Response</span></span>) {</span><br><span class="line">  <span class="keyword">try</span> {</span><br><span class="line">    <span class="keyword">const</span> { code } = req.<span class="property">body</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!code) {</span><br><span class="line">      <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">json</span>({ </span><br><span class="line">        <span class="attr">success</span>: <span class="literal">false</span>, </span><br><span class="line">        <span class="attr">message</span>: <span class="string">'缺少登录code'</span> </span><br><span class="line">      })</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 1. 请求微信API获取openid和session_key</span></span><br><span class="line">    <span class="keyword">const</span> wxResponse = <span class="keyword">await</span> axios.<span class="title function_">get</span>(<span class="variable constant_">WX_CONFIG</span>.<span class="property">loginUrl</span>, {</span><br><span class="line">      <span class="attr">params</span>: {</span><br><span class="line">        <span class="attr">appid</span>: <span class="variable constant_">WX_CONFIG</span>.<span class="property">appId</span>,</span><br><span class="line">        <span class="attr">secret</span>: <span class="variable constant_">WX_CONFIG</span>.<span class="property">appSecret</span>,</span><br><span class="line">        <span class="attr">js_code</span>: code,</span><br><span class="line">        <span class="attr">grant_type</span>: <span class="string">'authorization_code'</span></span><br><span class="line">      }</span><br><span class="line">    })</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> { openid, session_key } = wxResponse.<span class="property">data</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!openid) {</span><br><span class="line">      <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">401</span>).<span class="title function_">json</span>({ </span><br><span class="line">        <span class="attr">success</span>: <span class="literal">false</span>, </span><br><span class="line">        <span class="attr">message</span>: <span class="string">'获取openid失败'</span> </span><br><span class="line">      })</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2. 根据openid查询数据库，判断用户是否存在</span></span><br><span class="line">    <span class="keyword">let</span> user = <span class="keyword">await</span> <span class="title class_">User</span>.<span class="title function_">findOne</span>({ openid })</span><br><span class="line">    <span class="keyword">let</span> isNewUser = <span class="literal">false</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3. 如果用户不存在，则创建新用户</span></span><br><span class="line">    <span class="keyword">if</span> (!user) {</span><br><span class="line">      isNewUser = <span class="literal">true</span></span><br><span class="line">      user = <span class="keyword">await</span> <span class="title class_">User</span>.<span class="title function_">create</span>({</span><br><span class="line">        openid,</span><br><span class="line">        <span class="attr">createdAt</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(),</span><br><span class="line">        <span class="comment">// 其他默认数据</span></span><br><span class="line">        <span class="attr">nickname</span>: <span class="string">`用户<span class="subst">${<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">10000</span>)}</span>`</span>,</span><br><span class="line">        <span class="attr">avatarUrl</span>: <span class="string">''</span>, <span class="comment">// 默认头像</span></span><br><span class="line">      })</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 4. 生成token</span></span><br><span class="line">    <span class="keyword">const</span> token = jwt.<span class="title function_">sign</span>(</span><br><span class="line">      { <span class="attr">userId</span>: user.<span class="property">_id</span>, openid },</span><br><span class="line">      process.<span class="property">env</span>.<span class="property">JWT_SECRET</span>,</span><br><span class="line">      { <span class="attr">expiresIn</span>: <span class="string">'7d'</span> }</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 5. 更新用户的最后登录时间</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title class_">User</span>.<span class="title function_">updateOne</span>(</span><br><span class="line">      { <span class="attr">_id</span>: user.<span class="property">_id</span> },</span><br><span class="line">      { <span class="attr">$set</span>: { <span class="attr">lastLoginAt</span>: <span class="keyword">new</span> <span class="title class_">Date</span>() } }</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 6. 返回登录结果</span></span><br><span class="line">    <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">200</span>).<span class="title function_">json</span>({</span><br><span class="line">      <span class="attr">success</span>: <span class="literal">true</span>,</span><br><span class="line">      token,</span><br><span class="line">      <span class="attr">userInfo</span>: {</span><br><span class="line">        <span class="attr">_id</span>: user.<span class="property">_id</span>,</span><br><span class="line">        <span class="attr">nickname</span>: user.<span class="property">nickname</span>,</span><br><span class="line">        <span class="attr">avatarUrl</span>: user.<span class="property">avatarUrl</span>,</span><br><span class="line">        <span class="comment">// 其他需要的用户信息</span></span><br><span class="line">      },</span><br><span class="line">      isNewUser</span><br><span class="line">    })</span><br><span class="line">    </span><br><span class="line">  } <span class="keyword">catch</span> (error) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'登录异常:'</span>, error)</span><br><span class="line">    <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">json</span>({</span><br><span class="line">      <span class="attr">success</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="attr">message</span>: <span class="string">'服务器错误'</span></span><br><span class="line">    })</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 验证token接口</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">checkToken</span>(<span class="params"><span class="attr">req</span>: <span class="title class_">Request</span>, <span class="attr">res</span>: <span class="title class_">Response</span></span>) {</span><br><span class="line">  <span class="keyword">try</span> {</span><br><span class="line">    <span class="comment">// token已经在中间件中验证过，能到这里说明token有效</span></span><br><span class="line">    <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">200</span>).<span class="title function_">json</span>({</span><br><span class="line">      <span class="attr">valid</span>: <span class="literal">true</span></span><br><span class="line">    })</span><br><span class="line">  } <span class="keyword">catch</span> (error) {</span><br><span class="line">    <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">401</span>).<span class="title function_">json</span>({</span><br><span class="line">      <span class="attr">valid</span>: <span class="literal">false</span></span><br><span class="line">    })</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="请求封装"><a href="#请求封装" class="headerlink" title="请求封装"></a>请求封装</h4><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// request.ts</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Taro</span> <span class="keyword">from</span> <span class="string">'@tarojs/taro'</span></span><br><span class="line"><span class="keyword">import</span> { ensureLogin } <span class="keyword">from</span> <span class="string">'./login'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 封装请求方法，自动携带token和处理登录态</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">request</span>(<span class="params">options</span>) {</span><br><span class="line">  <span class="comment">// 获取存储的token</span></span><br><span class="line">  <span class="keyword">const</span> token = <span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'token'</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 合并请求头</span></span><br><span class="line">  <span class="keyword">const</span> header = {</span><br><span class="line">    <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,</span><br><span class="line">    ...options.<span class="property">header</span></span><br><span class="line">  }</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 如果有token，则添加到请求头</span></span><br><span class="line">  <span class="keyword">if</span> (token) {</span><br><span class="line">    header[<span class="string">'Authorization'</span>] = <span class="string">`Bearer <span class="subst">${token}</span>`</span></span><br><span class="line">  }</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">try</span> {</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title class_">Taro</span>.<span class="title function_">request</span>({</span><br><span class="line">      ...options,</span><br><span class="line">      header</span><br><span class="line">    })</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 请求成功</span></span><br><span class="line">    <span class="keyword">if</span> (response.<span class="property">statusCode</span> &gt;= <span class="number">200</span> &amp;&amp; response.<span class="property">statusCode</span> &lt; <span class="number">300</span>) {</span><br><span class="line">      <span class="keyword">return</span> response.<span class="property">data</span></span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// token 失效（401）</span></span><br><span class="line">    <span class="keyword">if</span> (response.<span class="property">statusCode</span> === <span class="number">401</span>) {</span><br><span class="line">      <span class="comment">// 清除已失效的token</span></span><br><span class="line">      <span class="title class_">Taro</span>.<span class="title function_">removeStorageSync</span>(<span class="string">'token'</span>)</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 重新登录</span></span><br><span class="line">      <span class="keyword">const</span> loginSuccess = <span class="keyword">await</span> <span class="title function_">ensureLogin</span>()</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span> (loginSuccess) {</span><br><span class="line">        <span class="comment">// 登录成功，重试原请求</span></span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">request</span>(options)</span><br><span class="line">      } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">'登录失败，无法完成请求'</span>)</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 其他错误</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(response.<span class="property">data</span>.<span class="property">message</span> || <span class="string">'请求失败'</span>)</span><br><span class="line">    </span><br><span class="line">  } <span class="keyword">catch</span> (error) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'请求异常:'</span>, error)</span><br><span class="line">    <span class="keyword">throw</span> error</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="登录状态管理（使用Pinia）"><a href="#登录状态管理（使用Pinia）" class="headerlink" title="登录状态管理（使用Pinia）"></a>登录状态管理（使用Pinia）</h4><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stores/user.ts</span></span><br><span class="line"><span class="keyword">import</span> { defineStore } <span class="keyword">from</span> <span class="string">'pinia'</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Taro</span> <span class="keyword">from</span> <span class="string">'@tarojs/taro'</span></span><br><span class="line"><span class="keyword">import</span> { ensureLogin } <span class="keyword">from</span> <span class="string">'../utils/login'</span></span><br><span class="line"><span class="keyword">import</span> { getUserInfo } <span class="keyword">from</span> <span class="string">'../services/user'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useUserStore = <span class="title function_">defineStore</span>(<span class="string">'user'</span>, {</span><br><span class="line">  <span class="attr">state</span>: <span class="function">() =&gt;</span> ({</span><br><span class="line">    <span class="attr">token</span>: <span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'token'</span>) || <span class="string">''</span>,</span><br><span class="line">    <span class="attr">userInfo</span>: <span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'userInfo'</span>) || <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">isLoggedIn</span>: !!<span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'token'</span>),</span><br><span class="line">    <span class="attr">isLoading</span>: <span class="literal">false</span></span><br><span class="line">  }),</span><br><span class="line">  </span><br><span class="line">  <span class="attr">actions</span>: {</span><br><span class="line">    <span class="comment">// 初始化检查登录状态</span></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">checkLoginStatus</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">isLoading</span> = <span class="literal">true</span></span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">isLoggedIn</span>) {</span><br><span class="line">          <span class="comment">// 刷新用户信息</span></span><br><span class="line">          <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">fetchUserInfo</span>()</span><br><span class="line">        }</span><br><span class="line">      } <span class="keyword">catch</span> (error) {</span><br><span class="line">        <span class="comment">// 出错则置为未登录状态</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">isLoggedIn</span> = <span class="literal">false</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">token</span> = <span class="string">''</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">userInfo</span> = <span class="literal">null</span></span><br><span class="line">        <span class="title class_">Taro</span>.<span class="title function_">removeStorageSync</span>(<span class="string">'token'</span>)</span><br><span class="line">        <span class="title class_">Taro</span>.<span class="title function_">removeStorageSync</span>(<span class="string">'userInfo'</span>)</span><br><span class="line">      } <span class="keyword">finally</span> {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">isLoading</span> = <span class="literal">false</span></span><br><span class="line">      }</span><br><span class="line">    },</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 登录</span></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">login</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">isLoading</span> = <span class="literal">true</span></span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> success = <span class="keyword">await</span> <span class="title function_">ensureLogin</span>()</span><br><span class="line">        <span class="keyword">if</span> (success) {</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">token</span> = <span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'token'</span>)</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">userInfo</span> = <span class="title class_">Taro</span>.<span class="title function_">getStorageSync</span>(<span class="string">'userInfo'</span>)</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">isLoggedIn</span> = <span class="literal">true</span></span><br><span class="line">          <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">      } <span class="keyword">catch</span> (error) {</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'登录失败'</span>, error)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">      } <span class="keyword">finally</span> {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">isLoading</span> = <span class="literal">false</span></span><br><span class="line">      }</span><br><span class="line">    },</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取用户信息</span></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">fetchUserInfo</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">token</span>) <span class="keyword">return</span></span><br><span class="line">      </span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> userInfo = <span class="keyword">await</span> <span class="title function_">getUserInfo</span>()</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">userInfo</span> = userInfo</span><br><span class="line">        <span class="title class_">Taro</span>.<span class="title function_">setStorageSync</span>(<span class="string">'userInfo'</span>, userInfo)</span><br><span class="line">      } <span class="keyword">catch</span> (error) {</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">'获取用户信息失败'</span>, error)</span><br><span class="line">      }</span><br><span class="line">    },</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 退出登录</span></span><br><span class="line">    <span class="title function_">logout</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">token</span> = <span class="string">''</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">userInfo</span> = <span class="literal">null</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">isLoggedIn</span> = <span class="literal">false</span></span><br><span class="line">      <span class="title class_">Taro</span>.<span class="title function_">removeStorageSync</span>(<span class="string">'token'</span>)</span><br><span class="line">      <span class="title class_">Taro</span>.<span class="title function_">removeStorageSync</span>(<span class="string">'userInfo'</span>)</span><br><span class="line">      <span class="title class_">Taro</span>.<span class="title function_">showToast</span>({ <span class="attr">title</span>: <span class="string">'已退出登录'</span>, <span class="attr">icon</span>: <span class="string">'success'</span> })</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="登录流程使用示例"><a href="#登录流程使用示例" class="headerlink" title="登录流程使用示例"></a>登录流程使用示例</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;view class="login-page"&gt;</span><br><span class="line">    &lt;view v-if="!userStore.isLoggedIn"&gt;</span><br><span class="line">      &lt;button @tap="handleLogin" :loading="userStore.isLoading"&gt;</span><br><span class="line">        微信一键登录</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">    &lt;/view&gt;</span><br><span class="line">    &lt;view v-else&gt;</span><br><span class="line">      &lt;view class="user-info"&gt;</span><br><span class="line">        &lt;image :src="userStore.userInfo?.avatarUrl || defaultAvatar" class="avatar" /&gt;</span><br><span class="line">        &lt;text class="nickname"&gt;{{ userStore.userInfo?.nickname || '未设置昵称' }}&lt;/text&gt;</span><br><span class="line">      &lt;/view&gt;</span><br><span class="line">      &lt;button @tap="userStore.logout" type="default"&gt;退出登录&lt;/button&gt;</span><br><span class="line">    &lt;/view&gt;</span><br><span class="line">  &lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import { onLoad } from '@tarojs/taro'</span><br><span class="line">import { useUserStore } from '../../stores/user'</span><br><span class="line"></span><br><span class="line">const userStore = useUserStore()</span><br><span class="line">const defaultAvatar = '../../assets/default-avatar.png'</span><br><span class="line"></span><br><span class="line">// 页面加载时检查登录状态</span><br><span class="line">onLoad(() =&gt; {</span><br><span class="line">  userStore.checkLoginStatus()</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line">// 处理登录</span><br><span class="line">const handleLogin = async () =&gt; {</span><br><span class="line">  const success = await userStore.login()</span><br><span class="line">  if (success) {</span><br><span class="line">    console.log('登录成功')</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="登录安全最佳实践"><a href="#登录安全最佳实践" class="headerlink" title="登录安全最佳实践"></a>登录安全最佳实践</h4><ol>
+<li><p><strong>使用 HTTPS</strong>：所有接口通信必须使用 HTTPS 加密传输</p>
+</li>
+<li><p><strong>TOKEN 处理</strong>：</p>
+<ul>
+<li>设置合理的过期时间（通常7天以内）</li>
+<li>支持主动刷新 TOKEN</li>
+<li>退出登录时清除 TOKEN</li>
+</ul>
+</li>
+<li><p><strong>敏感信息存储</strong>：</p>
+<ul>
+<li>不在客户端存储用户敏感信息</li>
+<li>使用小程序提供的安全存储 API</li>
+</ul>
+</li>
+<li><p><strong>防刷防暴力</strong>：</p>
+<ul>
+<li>登录接口增加频率限制</li>
+<li>多次失败后要求图形验证码或延时</li>
+</ul>
+</li>
+<li><p><strong>用户信息保护</strong>：</p>
+<ul>
+<li>只返回必要的用户信息</li>
+<li>敏感操作需要二次验证</li>
+</ul>
+</li>
+</ol>
+<h3 id="👤-获取用户信息"><a href="#👤-获取用户信息" class="headerlink" title="👤 获取用户信息"></a>👤 获取用户信息</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;button </span><br><span class="line">    open-type="chooseAvatar" </span><br><span class="line">    @chooseavatar="onChooseAvatar"&gt;</span><br><span class="line">    选择头像</span><br><span class="line">  &lt;/button&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;input </span><br><span class="line">    type="nickname" </span><br><span class="line">    placeholder="请输入昵称" </span><br><span class="line">    @change="onNicknameChange" </span><br><span class="line">  /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import { ref } from 'vue'</span><br><span class="line">import Taro from '@tarojs/taro'</span><br><span class="line"></span><br><span class="line">const avatarUrl = ref('')</span><br><span class="line">const nickname = ref('')</span><br><span class="line"></span><br><span class="line">const onChooseAvatar = (e) =&gt; {</span><br><span class="line">  avatarUrl.value = e.detail.avatarUrl</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">const onNicknameChange = (e) =&gt; {</span><br><span class="line">  nickname.value = e.detail.value</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">const saveUserInfo = async () =&gt; {</span><br><span class="line">  if (!avatarUrl.value || !nickname.value) {</span><br><span class="line">    Taro.showToast({</span><br><span class="line">      title: '请完善信息',</span><br><span class="line">      icon: 'none'</span><br><span class="line">    })</span><br><span class="line">    return</span><br><span class="line">  }</span><br><span class="line">  </span><br><span class="line">  // 上传头像到服务器</span><br><span class="line">  const uploadRes = await uploadFile(avatarUrl.value)</span><br><span class="line">  </span><br><span class="line">  // 保存用户信息</span><br><span class="line">  await updateUserInfo({</span><br><span class="line">    avatarUrl: uploadRes.url,</span><br><span class="line">    nickname: nickname.value</span><br><span class="line">  })</span><br><span class="line">}</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="📱-小程序适配与兼容性"><a href="#📱-小程序适配与兼容性" class="headerlink" title="📱 小程序适配与兼容性"></a>📱 小程序适配与兼容性</h3><h4 id="📊-基础库版本"><a href="#📊-基础库版本" class="headerlink" title="📊 基础库版本"></a>📊 基础库版本</h4><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">miniprogramRoot</span>: <span class="string">'./'</span>,</span><br><span class="line">  <span class="attr">projectname</span>: <span class="string">'MyApp'</span>,</span><br><span class="line">  <span class="attr">setting</span>: {</span><br><span class="line">    <span class="attr">minified</span>: <span class="literal">true</span>, <span class="comment">// 压缩代码</span></span><br><span class="line">    <span class="attr">es6</span>: <span class="literal">true</span>, <span class="comment">// 开启ES6转换</span></span><br><span class="line">  },</span><br><span class="line">  <span class="attr">libVersion</span>: <span class="string">'2.24.7'</span>, <span class="comment">// 指定基础库版本</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="🔄-版本检测与提示"><a href="#🔄-版本检测与提示" class="headerlink" title="🔄 版本检测与提示"></a>🔄 版本检测与提示</h4><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">checkVersion</span> = (<span class="params"></span>) =&gt; {</span><br><span class="line">  <span class="comment">// 获取微信版本信息</span></span><br><span class="line">  <span class="keyword">const</span> version = <span class="title class_">Taro</span>.<span class="title function_">getSystemInfoSync</span>().<span class="property">SDKVersion</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 比较版本号</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">Taro</span>.<span class="title function_">compareVersion</span>(version, <span class="string">'2.21.0'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">    <span class="title class_">Taro</span>.<span class="title function_">showModal</span>({</span><br><span class="line">      <span class="attr">title</span>: <span class="string">'提示'</span>,</span><br><span class="line">      <span class="attr">content</span>: <span class="string">'当前微信版本过低，请更新至最新版本'</span>,</span><br><span class="line">      <span class="attr">showCancel</span>: <span class="literal">false</span></span><br><span class="line">    })</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="🎨-WeUI-组件使用"><a href="#🎨-WeUI-组件使用" class="headerlink" title="🎨 WeUI 组件使用"></a>🎨 WeUI 组件使用</h3><figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">useExtendedLib</span>: {</span><br><span class="line">    <span class="attr">weui</span>: <span class="literal">true</span></span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用示例：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;weui-form&gt;</span><br><span class="line">    &lt;weui-cells title="表单"&gt;</span><br><span class="line">      &lt;weui-cell&gt;</span><br><span class="line">        &lt;weui-input placeholder="请输入" /&gt;</span><br><span class="line">      &lt;/weui-cell&gt;</span><br><span class="line">    &lt;/weui-cells&gt;</span><br><span class="line">    &lt;weui-button type="primary"&gt;提交&lt;/weui-button&gt;</span><br><span class="line">  &lt;/weui-form&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="✨-最佳实践"><a href="#✨-最佳实践" class="headerlink" title="✨ 最佳实践"></a>✨ 最佳实践</h2><table>
+<thead>
+<tr>
+<th align="left">实践</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">📁 <strong>代码组织</strong></td>
+<td align="left">按功能模块拆分组件，避免过大的页面文件</td>
+</tr>
+<tr>
+<td align="left">🔄 <strong>状态管理</strong></td>
+<td align="left">复杂应用使用 Pinia 等状态管理工具</td>
+</tr>
+<tr>
+<td align="left">🎨 <strong>样式管理</strong></td>
+<td align="left">使用预处理器，模块化CSS</td>
+</tr>
+<tr>
+<td align="left">🔄 <strong>兼容性</strong></td>
+<td align="left">注意小程序平台差异，做好兼容处理</td>
+</tr>
+<tr>
+<td align="left">🔒 <strong>安全性</strong></td>
+<td align="left">敏感数据不存储在本地，使用token验证请求</td>
+</tr>
+<tr>
+<td align="left">⚠️ <strong>错误处理</strong></td>
+<td align="left">完善的错误捕获和提示机制</td>
+</tr>
+<tr>
+<td align="left">🔄 <strong>代码复用</strong></td>
+<td align="left">抽取公共逻辑到 hooks/composables 中</td>
+</tr>
+<tr>
+<td align="left">🔌 <strong>接口封装</strong></td>
+<td align="left">统一封装网络请求，便于管理</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://aoayaoa.github.io">aoaYaoa</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://aoayaoa.github.io/2024/09/08/taro/">https://aoayaoa.github.io/2024/09/08/taro/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://aoayaoa.github.io" target="_blank">aoaYaoa</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Taro/">Taro</a></div><div class="post-share"><div class="social-share" data-image="/img/taro.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/07/07/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="性能优化"><img class="cover" src="/img/youhua.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">性能优化</div></div><div class="info-2"><div class="info-item-1">Web 性能优化完全指南目录 1. 加载性能优化 2. 渲染性能优化 3. 资源优化 4. 网络层优化 5. 缓存策略 6. 框架级优化 7. 移动端专项优化 8. 性能监控与分析 9. 进阶优化策略 10. 工具链推荐   1. 加载性能优化1.1 关键渲染路径优化1.1.1 CSS优化1234567891011121314// 1. 内联关键CSS&lt;style&gt;  /* 首屏关键样式 */  .header { ... }  .hero-section { ... }&lt;/style&gt;// 2....</div></div></div></a><a class="pagination-related" href="/2024/12/13/Promise/" title="深入理解Promise"><img class="cover" src="/img/promise.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">深入理解Promise</div></div><div class="info-2"><div class="info-item-1">深入理解 JavaScript Promise：从入门到精通前言Promise 是 JavaScript 中处理异步操作的核心机制，它的出现让我们告别了回调地狱，使异步代码更加清晰和易于维护。本文将深入探讨 Promise 的方方面面，从基础概念到高级应用，帮助你全面掌握这一重要特性。 目录 1. Promise 基础 2. Promise 状态 3. Promise 方法 4. 错误处理 5. Promise 链式调用 6. Promise 静态方法 7. async/await 8. 实际应用场景 9. 最佳实践 10. 常见问题和陷阱 11. 更多实际应用场景 12....</div></div></div></a></nav><hr class="custom-hr"><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC82MDU3OC8zNzA0OQ=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">aoaYaoa</div><div class="author-info-description">个人博客，记录成长点滴...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/aoaYaoa"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/aoaYaoa" rel="external nofollow noreferrer" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #181717;"></i></a><a class="social-icon" href="https://twitter.com/yourname" rel="external nofollow noreferrer" target="_blank" title="Twitter"><i class="fab fa-twitter" style="color: #1DA1F2;"></i></a><a class="social-icon" href="/skyeeq9@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #EA4335;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客，这里分享技术和生活的点滴！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Deno%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-%F0%9F%93%98"><span class="toc-number">1.</span> <span class="toc-text">Deno学习记录 📘</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%93%B1-Taro-%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">📱 Taro 学习总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="toc-number">2.1.</span> <span class="toc-text">📑 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%B0-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">2.2.</span> <span class="toc-text">🔰 基础概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%82-%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-number">2.3.</span> <span class="toc-text">📂 项目结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9A%80-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-number">2.4.</span> <span class="toc-text">🚀 基础使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA%E5%92%8C%E5%90%AF%E5%8A%A8"><span class="toc-number">2.4.1.</span> <span class="toc-text">1️⃣ 项目创建和启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.4.2.</span> <span class="toc-text">2️⃣ 配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E5%BA%94%E7%94%A8%E5%85%A5%E5%8F%A3"><span class="toc-number">2.4.3.</span> <span class="toc-text">3️⃣ 应用入口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%B8%8F%E2%83%A3-%E9%A1%B5%E9%9D%A2%E5%BC%80%E5%8F%91"><span class="toc-number">2.4.4.</span> <span class="toc-text">4️⃣ 页面开发</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.5.</span> <span class="toc-text">⚠️ 小程序开发注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">2.5.1.</span> <span class="toc-text">📌 生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Taro-%E6%A1%86%E6%9E%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9A"><span class="toc-number">2.5.1.1.</span> <span class="toc-text">Taro 框架生命周期：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9A"><span class="toc-number">2.5.1.2.</span> <span class="toc-text">页面生命周期：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F-API-%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9A"><span class="toc-number">2.5.1.3.</span> <span class="toc-text">组合式 API 中使用生命周期：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-%E8%B7%AF%E7%94%B1%E4%B8%8E%E5%AF%BC%E8%88%AA"><span class="toc-number">2.5.2.</span> <span class="toc-text">📌 路由与导航</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-number">2.5.3.</span> <span class="toc-text">📌 状态管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-number">2.5.4.</span> <span class="toc-text">📌 数据存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82"><span class="toc-number">2.5.5.</span> <span class="toc-text">📌 网络请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-UI-%E7%BB%84%E4%BB%B6%E4%BD%BF%E7%94%A8"><span class="toc-number">2.5.6.</span> <span class="toc-text">📌 UI 组件使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%88%86%E4%BA%AB%E5%8A%9F%E8%83%BD"><span class="toc-number">2.5.7.</span> <span class="toc-text">📌 小程序分享功能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9A%AB-%E6%98%93%E9%94%99%E7%82%B9%E4%B8%8E%E5%BC%80%E5%8F%91%E9%99%B7%E9%98%B1"><span class="toc-number">2.6.</span> <span class="toc-text">🚫 易错点与开发陷阱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9B%94-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%BD%BF%E7%94%A8%E9%94%99%E8%AF%AF"><span class="toc-number">2.6.1.</span> <span class="toc-text">⛔ 生命周期使用错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9B%94-JSX-%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95%E5%B7%AE%E5%BC%82"><span class="toc-number">2.6.2.</span> <span class="toc-text">⛔ JSX/模板语法差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9B%94-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86"><span class="toc-number">2.6.3.</span> <span class="toc-text">⛔ 事件处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9B%94-%E6%A0%B7%E5%BC%8F%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.4.</span> <span class="toc-text">⛔ 样式问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9B%94-API-%E4%BD%BF%E7%94%A8%E8%AF%AF%E5%8C%BA"><span class="toc-number">2.6.5.</span> <span class="toc-text">⛔ API 使用误区</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9B%A0%EF%B8%8F-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.7.</span> <span class="toc-text">🛠️ 常见问题与解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%A8-%E6%A0%B7%E5%BC%8F%E9%97%AE%E9%A2%98"><span class="toc-number">2.7.1.</span> <span class="toc-text">🎨 样式问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%84-%E5%B9%B3%E5%8F%B0%E5%B7%AE%E5%BC%82%E5%A4%84%E7%90%86"><span class="toc-number">2.7.2.</span> <span class="toc-text">🔄 平台差异处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%A1-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.7.3.</span> <span class="toc-text">⚡ 性能优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%8F%B3-%E5%BC%82%E6%AD%A5-API-%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">2.7.4.</span> <span class="toc-text">⏳ 异步 API 的处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%A6-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E4%B8%8E%E5%8F%91%E5%B8%83"><span class="toc-number">2.8.</span> <span class="toc-text">📦 小程序打包与发布</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%B1-%E5%88%86%E5%8C%85%E9%85%8D%E7%BD%AE"><span class="toc-number">2.8.1.</span> <span class="toc-text">📱 分包配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8A-%E5%88%86%E5%8C%85%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="toc-number">2.8.2.</span> <span class="toc-text">📊 分包优化策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8F%9E%EF%B8%8F-%E7%8B%AC%E7%AB%8B%E5%88%86%E5%8C%85"><span class="toc-number">2.8.3.</span> <span class="toc-text">🏞️ 独立分包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%84-%E5%88%86%E5%8C%85%E9%A2%84%E5%8A%A0%E8%BD%BD"><span class="toc-number">2.8.4.</span> <span class="toc-text">🔄 分包预加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%89-%E5%8C%85%E4%BD%93%E7%A7%AF%E4%BC%98%E5%8C%96"><span class="toc-number">2.8.5.</span> <span class="toc-text">📉 包体积优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%97%9C%EF%B8%8F-%E4%BB%A3%E7%A0%81%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.8.5.1.</span> <span class="toc-text">🗜️ 代码压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%96%BC%EF%B8%8F-%E8%B5%84%E6%BA%90%E4%BC%98%E5%8C%96"><span class="toc-number">2.8.5.2.</span> <span class="toc-text">🖼️ 资源优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%93%A5-%E6%8C%89%E9%9C%80%E5%BC%95%E5%85%A5"><span class="toc-number">2.8.5.3.</span> <span class="toc-text">📥 按需引入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%9A%80-%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B%E4%B8%8E%E5%AE%A1%E6%A0%B8"><span class="toc-number">2.8.6.</span> <span class="toc-text">🚀 发布流程与审核</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%93%8B-%E7%89%88%E6%9C%AC%E5%8F%B7%E7%AE%A1%E7%90%86"><span class="toc-number">2.8.6.1.</span> <span class="toc-text">📋 版本号管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%93%9D-%E6%8F%90%E5%AE%A1%E6%9D%90%E6%96%99%E5%87%86%E5%A4%87"><span class="toc-number">2.8.6.2.</span> <span class="toc-text">📝 提审材料准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E5%B8%B8%E8%A7%81%E5%AE%A1%E6%A0%B8%E9%97%AE%E9%A2%98"><span class="toc-number">2.8.6.3.</span> <span class="toc-text">⚠️ 常见审核问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%84-CI-CD-%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8F%91%E5%B8%83"><span class="toc-number">2.8.7.</span> <span class="toc-text">🔄 CI/CD 自动化发布</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%A1-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">2.9.</span> <span class="toc-text">⚡ 性能优化最佳实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%9A%80-%E5%90%AF%E5%8A%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.9.1.</span> <span class="toc-text">🚀 启动性能优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%8F%B1%EF%B8%8F-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.9.2.</span> <span class="toc-text">⏱️ 运行时性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%9B%91-%E9%81%BF%E5%85%8D%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E6%B8%B2%E6%9F%93"><span class="toc-number">2.9.2.1.</span> <span class="toc-text">🛑 避免不必要的渲染</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%93%9C-%E9%95%BF%E5%88%97%E8%A1%A8%E4%BC%98%E5%8C%96"><span class="toc-number">2.9.2.2.</span> <span class="toc-text">📜 长列表优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%96%BC%EF%B8%8F-%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="toc-number">2.9.2.3.</span> <span class="toc-text">🖼️ 图片懒加载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%92%80-%E9%AA%A8%E6%9E%B6%E5%B1%8F%E4%BC%98%E5%8C%96"><span class="toc-number">2.9.3.</span> <span class="toc-text">💀 骨架屏优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8C%90-%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E4%BC%98%E5%8C%96"><span class="toc-number">2.9.4.</span> <span class="toc-text">🌐 网络请求优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%90-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%89%B9%E6%9C%89%E5%8A%9F%E8%83%BD"><span class="toc-number">2.10.</span> <span class="toc-text">🔐 小程序特有功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%91-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B%E4%BC%98%E5%8C%96"><span class="toc-number">2.10.1.</span> <span class="toc-text">🔑 小程序登录流程优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">2.10.1.1.</span> <span class="toc-text">完整登录流程图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B%E8%AF%B4%E6%98%8E"><span class="toc-number">2.10.1.2.</span> <span class="toc-text">登录流程说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.10.1.3.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E5%AE%9E%E7%8E%B0%EF%BC%88Taro%EF%BC%89"><span class="toc-number">2.10.1.3.1.</span> <span class="toc-text">前端实现（Taro）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%AE%9E%E7%8E%B0%EF%BC%88Node-js%EF%BC%89"><span class="toc-number">2.10.1.3.2.</span> <span class="toc-text">服务端实现（Node.js）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E5%B0%81%E8%A3%85"><span class="toc-number">2.10.1.4.</span> <span class="toc-text">请求封装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%EF%BC%88%E4%BD%BF%E7%94%A8Pinia%EF%BC%89"><span class="toc-number">2.10.1.5.</span> <span class="toc-text">登录状态管理（使用Pinia）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.10.1.6.</span> <span class="toc-text">登录流程使用示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E5%AE%89%E5%85%A8%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">2.10.1.7.</span> <span class="toc-text">登录安全最佳实践</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%91%A4-%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-number">2.10.2.</span> <span class="toc-text">👤 获取用户信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%B1-%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%80%82%E9%85%8D%E4%B8%8E%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">2.10.3.</span> <span class="toc-text">📱 小程序适配与兼容性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%93%8A-%E5%9F%BA%E7%A1%80%E5%BA%93%E7%89%88%E6%9C%AC"><span class="toc-number">2.10.3.1.</span> <span class="toc-text">📊 基础库版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%94%84-%E7%89%88%E6%9C%AC%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%8F%90%E7%A4%BA"><span class="toc-number">2.10.3.2.</span> <span class="toc-text">🔄 版本检测与提示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%A8-WeUI-%E7%BB%84%E4%BB%B6%E4%BD%BF%E7%94%A8"><span class="toc-number">2.10.4.</span> <span class="toc-text">🎨 WeUI 组件使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9C%A8-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">2.11.</span> <span class="toc-text">✨ 最佳实践</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/04/15/deno%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" title="Deno学习记录"><img src="/img/deno.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Deno学习记录"></a><div class="content"><a class="title" href="/2025/04/15/deno%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" title="Deno学习记录">Deno学习记录</a><time datetime="2025-04-14T16:00:00.000Z" title="发表于 2025-04-15 00:00:00">2025-04-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/07/nginx/" title="nginx 学习配置记录"><img src="/img/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="nginx 学习配置记录"></a><div class="content"><a class="title" href="/2025/01/07/nginx/" title="nginx 学习配置记录">nginx 学习配置记录</a><time datetime="2025-01-06T16:00:00.000Z" title="发表于 2025-01-07 00:00:00">2025-01-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Promise/" title="深入理解Promise"><img src="/img/promise.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="深入理解Promise"></a><div class="content"><a class="title" href="/2024/12/13/Promise/" title="深入理解Promise">深入理解Promise</a><time datetime="2024-12-12T16:00:00.000Z" title="发表于 2024-12-13 00:00:00">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/08/taro/" title="Taro使用记录"><img src="/img/taro.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Taro使用记录"></a><div class="content"><a class="title" href="/2024/09/08/taro/" title="Taro使用记录">Taro使用记录</a><time datetime="2024-09-07T16:00:00.000Z" title="发表于 2024-09-08 00:00:00">2024-09-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/07/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="性能优化"><img src="/img/youhua.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="性能优化"></a><div class="content"><a class="title" href="/2024/07/07/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="性能优化">性能优化</a><time datetime="2024-07-06T16:00:00.000Z" title="发表于 2024-07-07 00:00:00">2024-07-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">©2019 - 2025 By aoaYaoa</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.4</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><div class="aplayer no-destroy" data-id="13528716738" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => fn())
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true 
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章..." type="text"></div></div><hr><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
