@@ -42,17 +42,17 @@ new Artitalk({
   atComment:1
 });
 // 动态设置按钮样式，使用color1的值
-// document.addEventListener('DOMContentLoaded', function() {
-//   // 等待Artitalk加载完成
-//   setTimeout(function() {
-//     const buttons = document.querySelectorAll('#artitalk_main .at_button');
-//     buttons.forEach(button => {
-//       button.style.backgroundImage = artitalkConfig.color1;
-//       button.style.color = '#fff';
-//       button.style.borderRadius = '4px';
-//     });
-//   }, 1000);
-// });
+document.addEventListener('DOMContentLoaded', function() {
+  // 等待Artitalk加载完成
+  setTimeout(function() {
+    const buttons = document.querySelectorAll('#artitalk_main .at_button');
+    buttons.forEach(button => {
+      button.style.backgroundColor = 'linear-gradient(45deg,rgba(109,208,242,0.75) 15%,rgba(245,154,190,0.75) 85%)';
+      button.style.color = '#fff';
+      button.style.borderRadius = '4px';
+    });
+  }, 1000);
+});
 </script>
 <style>
     #artitalk_main .at_button {
