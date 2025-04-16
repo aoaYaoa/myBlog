@@ -611,13 +611,13 @@ livere:
 # https://github.com/gitalk/gitalk
 gitalk:
   enable: true
-  owner: aoaYaoa       # GitHub 用户名
-  repo: hexo-comments                # 评论仓库名
-  client_id: Ov23liY2ymYYtgsmUeoN          # 从 GitHub 获取
-  client_secret: 39a78717ca5710bb38b412fd5e1cd2106b5319c5  # 从 GitHub 获取
-  admin: aoaYaoa   # 仓库管理员
-  distractionFreeMode: false  # 关闭无干扰模式
-  proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token
+  owner: aoaYaoa
+  repo: hexo-comments
+  client_id: Ov23liY2ymYYtgsmUeoN
+  client_secret: 39a78717ca5710bb38b412fd5e1cd2106b5319c5
+  admin: aoaYaoa
+  distractionFreeMode: false
+  redirect_uri: https://flourishing-pastelito-6407d8.netlify.app/
 
 # Valine
 # https://valine.js.org
