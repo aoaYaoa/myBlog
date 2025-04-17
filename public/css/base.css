@@ -18,5 +18,7 @@ body {
 .layout {
   margin-top: 1rem !important;
 }
-
+.tk-input .el-textarea .el-textarea__inner{
+  background-size: 30% 100% !important;
+}
 /* 其他通用样式... */

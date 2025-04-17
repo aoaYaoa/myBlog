@@ -124,7 +124,7 @@ code_blocks:
 social:
   fab fa-github: https://github.com/aoaYaoa || GitHub || '#181717'
   fab fa-twitter: https://twitter.com/yourname || Twitter || '#1DA1F2'
-  fas fa-envelope: skyeeq9@gmail.com || Email || '#EA4335'
+  fas fa-envelope: mailto:skyeeq9@gmail.com || Email || '#EA4335'
 
 # --------------------------------------
 # Image Settings
@@ -580,8 +580,8 @@ comments:
   # Format of two comments system : Disqus,Waline
   use: 
   #  - Livere
-   - Gitalk
-    #  - Twikoo
+  #  - Gitalk
+     - Twikoo
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -1125,7 +1125,7 @@ mobile:
 # --------------------------------------
 inject:
   head:
-    # - <link rel="stylesheet" href="/css/base.css">
+    - <link rel="stylesheet" href="/css/base.css">
     - <script src="/js/resources.js"></script>
     # - <link rel="stylesheet" href="/css/custom.css">
   bottom:
