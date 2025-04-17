@@ -402,7 +402,7 @@ aside:
       link: https://github.com/aoaYaoa
   card_announcement:
     enable: true
-    content: 欢迎来到我的博客，这里分享技术和生活的点滴！
+    content: 算了，不知道写什么，就这样吧！
   card_recent_post:
     enable: true
     limit: 5
