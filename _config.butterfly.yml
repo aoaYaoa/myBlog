@@ -237,7 +237,7 @@ subtitle:
   source: false
   # 如果關閉打字效果，subtitle 只會顯示 sub 的第一行文字
   sub:
-    - 灰色随想：记录生活，探索技术的个人空间。
+    - 随想：.-- .... .- - . ...- . .-.。
     - Never put off till tomorrow what you can do today
 
 
