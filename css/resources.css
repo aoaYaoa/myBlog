@@ -1,0 +1,351 @@
+/* 资源页面样式 */
+.resource-container {
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* 标题区域 */
+.section-title {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.section-title h1 {
+  font-size: 2rem;
+  color: #444;
+  margin: 0 0 10px 0;
+}
+
+.section-title p {
+  color: #777;
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* 分类过滤器 */
+.filter-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 30px 0;
+}
+
+.filter-tab {
+  padding: 8px 18px;
+  margin: 5px;
+  background: #eee;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-tab:hover {
+  background: #e0e0e0;
+}
+
+.filter-tab.active {
+  background: #555;
+  color: white;
+}
+
+/* 资源网格 */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  padding: 10px 0;
+  min-height: 200px;
+}
+
+/* 资源卡片 */
+.resource-card {
+  background: var(--card-bg, white);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.resource-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 卡片头部 */
+.card-header {
+  padding: 14px 14px 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* 资源图标 */
+.resource-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.resource-icon i {
+  color: white;
+  font-size: 1.8rem;
+}
+
+/* 资源标题 */
+.resource-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--font-color, #333);
+  margin: 0;
+}
+
+/* 卡片主体 */
+.card-body {
+  padding: 0 14px 14px;
+}
+
+.resource-desc {
+  color: var(--font-color, #666);
+  opacity: 0.7;
+  font-size: 0.85rem;
+  margin: 0 0 10px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3.9em;
+}
+
+/* 资源标签 */
+.resource-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: #f0f0f0;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  color: #666;
+  opacity: 1;
+}
+
+/* 外部链接图标 */
+.resource-link {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: var(--font-color, #bbb);
+  opacity: 0.4;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.resource-card:hover .resource-link {
+  opacity: 0.7;
+}
+
+/* 加载动画 */
+.loading {
+  text-align: center;
+  /* margin: 50px 0; */
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0,0,0,0.1);
+  border-radius: 50%;
+  border-top-color: #555;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 资源卡片动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeIn 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .resource-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    padding: 0 10px;
+  }
+
+  .card-header {
+    padding: 12px 10px 8px;
+  }
+
+  .resource-desc {
+    -webkit-line-clamp: 2;
+    max-height: 2.6em;
+  }
+
+  .resource-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .resource-title {
+    font-size: 1.1rem;
+  }
+
+  .resource-link {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+/* 暗色模式支持 */
+[data-theme="dark"] .filter-tab {
+  background: #333;
+  color: #aaa;
+}
+
+[data-theme="dark"] .filter-tab:hover {
+  background: #444;
+}
+
+[data-theme="dark"] .filter-tab.active {
+  background: #666;
+  color: #eee;
+}
+
+[data-theme="dark"] .tag {
+  background: #2d2d2d;
+  color: #aaa;
+}
+
+/* 资源页面专用样式 */
+
+/* 资源卡片容器 */
+.resources-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* 资源卡片 */
+.resource-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 资源卡片封面 */
+.resource-cover {
+  height: 160px;
+  overflow: hidden;
+}
+
+.resource-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.resource-card:hover .resource-cover img {
+  transform: scale(1.05);
+}
+
+/* 资源信息区 */
+.resource-info {
+  padding: 16px;
+}
+
+.resource-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.resource-desc {
+  color: var(--text-gray);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 资源标签和链接 */
+.resource-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.resource-tags {
+  display: flex;
+  gap: 5px;
+}
+
+.resource-tag {
+  background: var(--text-bg-hover);
+  color: var(--text-gray);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.resource-link {
+  color: var(--theme-color);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+.resource-link i {
+  margin-left: 4px;
+  transition: transform 0.2s;
+}
+
+.resource-link:hover i {
+  transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .resources-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}

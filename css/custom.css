@@ -1,0 +1,1029 @@
+/* 这个文件会自动引入样式 */
+@import url('/css/style.css'); /* 从_data/style.css导入所有样式 */
+
+/* 修复关于页面头像位置 */
+.page-about .author-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.page-about .author-box img.avatar-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 确保资源页面和工具页面的布局正确 */
+.resource-container, .tools-container {
+  padding-top: 1rem;
+}
+
+/* 修复顶部导航下方的内容区域距离 */
+.layout {
+  margin-top: 1rem !important;
+}
+
+/* 改进全局头像样式 */
+.avatar-img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* 为顶部导航栏添加阴影，提高可读性 */
+#nav {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 博客列表页样式 */
+#blog {
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+.blog-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.blog-title h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.blog-intro {
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.blog-posts {
+  width: 100%;
+}
+
+.blog-post-item {
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+  padding: 25px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-post-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.post-info {
+  flex: 1;
+}
+
+.post-title {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--font-color);
+  text-decoration: none;
+}
+
+.post-title:hover {
+  color: var(--theme-color);
+}
+
+.post-meta {
+  color: #999;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.post-meta i {
+  margin-right: 5px;
+}
+
+.post-content {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.post-more a {
+  display: inline-flex;
+  align-items: center;
+  color: var(--theme-color);
+  font-size: 0.9rem;
+}
+
+.post-more i {
+  margin-left: 5px;
+  transition: transform 0.2s;
+}
+
+.post-more a:hover i {
+  transform: translateX(3px);
+}
+
+.post-cover {
+  flex: 0 0 200px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.post-cover:hover img {
+  transform: scale(1.05);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .blog-post-item {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .post-cover {
+    flex: 0 0 auto;
+    height: 180px;
+    width: 100%;
+    order: -1;
+    margin-bottom: 15px;
+  }
+
+  .post-title {
+    font-size: 1.3rem;
+  }
+}
+
+/* 文章归档页样式优化 */
+#archive {
+  padding: 1.5rem 1rem !important;
+  border-radius: 12px;
+  background: var(--card-bg);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin: 2rem auto;
+}
+
+.article-sort-title {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-align: center !important;
+  margin: 0.5rem 0 2rem !important;
+  padding-bottom: 0.8rem !important;
+  position: relative !important;
+  color: var(--font-color) !important;
+}
+
+.article-sort-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--theme-color, #555), transparent);
+  border-radius: 3px;
+}
+
+.article-sort-title {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.article-sort-title span {
+  display: inline-block;
+  background: var(--theme-color, #555);
+  color: white;
+  padding: 0.1rem 0.6rem;
+  margin-left: 0.5rem;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  vertical-align: middle;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.article-sort-item {
+  position: relative;
+  margin-bottom: 0.75rem !important;
+  padding: 12px !important;
+  border-radius: 8px;
+  background: var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s;
+}
+
+.article-sort-item:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
+}
+
+.article-sort-item-time {
+  color: #888;
+  font-size: 0.8rem !important;
+}
+
+.article-sort-item-title {
+  color: var(--font-color);
+  font-weight: 600;
+  font-size: 1rem !important;
+  transition: color 0.3s;
+}
+
+.article-sort-item-title:hover {
+  color: var(--theme-color);
+}
+
+.article-sort-item .article-meta-wrap {
+  margin: 5px 0;
+  color: #999;
+}
+
+/* 文章列表页样式 */
+.articles-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.page-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.page-desc {
+  text-align: center;
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.article-list {
+  margin-top: 30px;
+}
+
+.article-item {
+  background: var(--card-bg, white);
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.article-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.article-title {
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.article-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.article-title a:hover {
+  color: var(--theme-color, #555);
+}
+
+/* .article-meta {
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+} */
+
+/* .article-meta i {
+  margin-right: 5px;
+} */
+
+.article-excerpt {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  color: var(--theme-color, #555);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.read-more i {
+  margin-left: 5px;
+  transition: transform 0.2s;
+}
+
+.read-more:hover i {
+  transform: translateX(3px);
+}
+
+.loading, .no-articles, .error-message {
+  text-align: center;
+  /* padding: 30px; */
+  color: #888;
+}
+
+.error-message {
+  color: #e74c3c;
+}
+
+/* 导航容器样式 */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+}
+
+.site-logo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.site-logo span {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #666;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+nav a:hover, nav a.active {
+  background: rgba(0,0,0,0.05);
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nav-container {
+    background: #1a1a1a;
+  }
+
+  .site-logo {
+    color: #eee;
+  }
+
+  nav a {
+    color: #ccc;
+  }
+
+  nav a:hover, nav a.active {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+}
+
+/* 减小顶部图片高度 */
+.archives-top-img {
+  height: 30vh !important; /* 减小顶部图片高度 */
+}
+
+/* 减小年份标记尺寸和间距 */
+.article-sort-item.year {
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+  color: var(--font-color);
+  position: relative;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.8rem 0 0.4rem 0 !important;
+  margin: 1.5rem 0 1rem !important;
+  border-bottom: 1px dashed rgba(128,128,128,0.2) !important;
+}
+
+/* 年份标记点样式 */
+.article-sort-item.year::before {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: var(--theme-color, #555) !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1) !important;
+  top: 1rem !important;
+  left: -1.7rem !important;
+}
+
+/* 文章卡片样式更新 */
+.article-sort-item:not(.year) {
+  transition: all 0.3s ease !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  margin-bottom: 0.8rem !important;
+  background: var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  border: 1px solid rgba(0,0,0,0.03) !important;
+}
+
+.article-sort-item:not(.year):hover {
+  transform: translateY(-3px) scale(1.01) !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08) !important;
+}
+
+/* 文章前标记点优化 */
+.article-sort-item:not(.year)::before {
+  display: none !important; /* 移除默认标记点，使用新的设计 */
+}
+
+/* 添加新的标记点，更加精致 */
+.article-sort-item:not(.year)::after {
+  content: '';
+  position: absolute;
+  left: -1.7rem;
+  top: 1.1rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+  border: 2px solid #fff;
+  box-shadow: 0 0 3px rgba(0,0,0,0.1);
+}
+
+/* 鼠标悬停时的标记点效果 */
+.article-sort-item:not(.year):hover::after {
+  background: var(--theme-color, #555);
+}
+
+/* 调整时间线本身 */
+#archive::before {
+  width: 1px !important;
+  left: 0 !important;
+}
+
+/* 调整文章排序容器左侧边距 */
+.article-sort {
+  border-left: 1px dashed rgba(128,128,128,0.3) !important;
+  padding-left: 1.5rem !important;
+  margin-left: 0.5rem !important;
+}
+
+/* 适配移动设备，进一步减小尺寸 */
+@media (max-width: 768px) {
+  .article-sort-title {
+    font-size: 1.4rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .article-sort-title::after {
+    width: 60px;
+  }
+
+  .article-sort-title span {
+    font-size: 1rem;
+    padding: 0.1rem 0.5rem;
+  }
+
+  .article-sort {
+    padding-left: 1.2rem !important;
+    margin-left: 0.3rem !important;
+  }
+
+  .article-sort-item.year {
+    font-size: 1.1rem !important;
+    padding: 0.5rem 0 0.3rem !important;
+  }
+
+  .article-sort-item.year::before {
+    left: -1.4rem !important;
+  }
+
+  .article-sort-item:not(.year)::after {
+    left: -1.4rem !important;
+  }
+
+  /* 文章卡片移动端优化 */
+  .article-sort-item-left {
+    height: 65px !important;
+    width: 65px !important;
+    margin-right: 0.7rem !important;
+  }
+
+  .article-sort-item-title {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* 优化文章卡片左侧区域的高度 */
+.article-sort-item-left {
+  height: 76px !important;
+  width: 76px !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  margin-right: 1rem !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+  flex-shrink: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.article-sort-item:hover .article-sort-item-left {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* 图片过渡效果 */
+.article-sort-item-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.5s ease !important;
+}
+
+.article-sort-item:hover .article-sort-item-img {
+  transform: scale(1.08) !important;
+}
+
+/* 文章标题样式改进 */
+.article-sort-item-title {
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0.4rem !important;
+  transition: color 0.3s !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* 日期样式优化 */
+.article-sort-item-time {
+  color: #999 !important;
+  font-size: 0.8rem !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.article-sort-item-time i {
+  margin-right: 0.3rem !important;
+  font-size: 0.9rem !important;
+}
+
+/* 优化移动端显示 */
+@media (max-width: 768px) {
+  .article-sort-item-left {
+    height: 70px !important;
+    width: 70px !important;
+  }
+
+  .article-sort-item-right {
+    min-height: 70px !important;
+  }
+}
+
+/* 网站整体风格优化 */
+body {
+  background-color: #f8f9fa !important; /* 更柔和的背景色 */
+}
+
+/* 主内容区域 */
+#content-inner {
+  padding: 1rem !important; /* 减小填充，节省空间 */
+}
+
+/* 顶部横幅优化 */
+#page-header {
+  background-attachment: fixed !important; /* 背景固定，滚动更流畅 */
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1) !important; /* 增强深度感 */
+}
+
+/* 统一卡片风格 */
+.card-widget {
+  border-radius: 12px !important;
+  transition: all 0.3s !important;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05) !important;
+}
+
+.card-widget:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* 文章页脚样式 */
+#footer {
+  background: rgba(255,255,255,0.8) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  border-top: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+/* 导航栏优化 */
+#nav.fixed {
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  /* 归档页面移动端优化 */
+  #archive {
+    padding: 1rem 0.8rem !important;
+    margin: 1rem auto !important;
+  }
+
+  .article-sort {
+    padding-left: 1.2rem !important;
+    margin-left: 0.3rem !important;
+  }
+
+  .article-sort-item.year {
+    font-size: 1.1rem !important;
+    padding: 0.5rem 0 0.3rem !important;
+  }
+
+  .article-sort-item.year::before {
+    left: -1.4rem !important;
+  }
+
+  .article-sort-item:not(.year)::after {
+    left: -1.4rem !important;
+  }
+
+  /* 文章卡片移动端优化 */
+  .article-sort-item-left {
+    height: 65px !important;
+    width: 65px !important;
+    margin-right: 0.7rem !important;
+  }
+
+  .article-sort-item-title {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* 深色模式优化 */
+[data-theme="dark"] #archive {
+  background: var(--card-bg) !important;
+}
+
+[data-theme="dark"] .article-sort {
+  border-left-color: rgba(255,255,255,0.1) !important;
+}
+
+[data-theme="dark"] .article-sort-item.year {
+  border-bottom-color: rgba(255,255,255,0.1) !important;
+}
+
+[data-theme="dark"] .article-sort-item:not(.year) {
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+[data-theme="dark"] .article-sort-item.year::before {
+  border-color: var(--card-bg) !important;
+}
+
+[data-theme="dark"] .article-sort-item:not(.year)::after {
+  background: #555;
+  border-color: var(--card-bg) !important;
+}
+
+/* 年份折叠功能样式 */
+.article-sort-item.year {
+  cursor: pointer !important;
+  user-select: none !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  transition: all 0.3s ease !important;
+}
+
+.article-sort-item.year:hover {
+  color: var(--theme-color, #555) !important;
+  background: rgba(0,0,0,0.02) !important;
+}
+
+.fold-icon {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.05);
+}
+
+.article-sort-item.year:hover .fold-icon {
+  background: var(--theme-color, #555);
+  color: white;
+}
+
+.article-sort-item:not(.year) {
+  transition: all 0.3s ease !important;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 折叠状态指示 */
+.article-sort-item.year.folded {
+  opacity: 0.8;
+}
+
+.article-sort-item.year.folded:hover {
+  opacity: 1;
+}
+
+/* 年份中的数字突出显示 */
+.article-sort-item.year .year-number {
+  font-weight: bold;
+  color: var(--theme-color, #555);
+}
+
+/* 隐藏404页面的侧边栏 */
+body.page-404 #aside-content {
+  display: none !important;
+}
+
+/* 确保404页面内容宽度 */
+body.page-404 #recent-posts,
+body.page-404 .layout > div:first-child {
+  width: 100% !important;
+}
+
+/* 优化首页文章卡片 */
+.recent-post-item {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 文章卡片悬停效果 */
+.recent-post-item:hover {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 文章封面图片区域 */
+.recent-post-item .post_cover {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 图片样式优化 */
+.recent-post-item .post_cover img {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 图片悬停效果 */
+.recent-post-item:hover .post_cover img {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 文章内容布局优化 */
+.recent-post-item .recent-post-info {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 文章标题 */
+.recent-post-item .article-title {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .article-title:hover {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 文章摘要 */
+.recent-post-item .content {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 文章元数据 */
+.recent-post-item .article-meta-wrap {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .article-meta__separator {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .article-meta__link {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .article-meta__link:hover {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 阅读更多按钮 */
+.recent-post-item .read-more-btn {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .read-more-btn:hover {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .read-more-btn i {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .read-more-btn:hover i {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 置顶文章标记 */
+.recent-post-item.sticky::before {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .recent-post-item {
+    /* 移除所有首页文章卡片的自定义样式 */
+  }
+
+  .recent-post-item .post_cover {
+    /* 移除所有首页文章卡片的自定义样式 */
+  }
+
+  .recent-post-item .recent-post-info {
+    /* 移除所有首页文章卡片的自定义样式 */
+  }
+
+  .recent-post-item .article-title {
+    /* 移除所有首页文章卡片的自定义样式 */
+  }
+}
+
+/* 添加一些细节美化 */
+.recent-post-item .post_cover::after {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item:hover .post_cover::after {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 添加文章分类/标签样式 */
+.recent-post-item .article-meta-wrap .article-meta__categories,
+.recent-post-item .article-meta-wrap .article-meta__tags {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.recent-post-item .article-meta-wrap i {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 新增特色标签，可显示"置顶"、"推荐"等 */
+.featured-badge {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 添加卡片底部阅读更多按钮 */
+.read-more-btn {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.read-more-btn:hover {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 增强首页布局整体效果 */
+#recent-posts {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 增加首页标题样式 */
+.index-header {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+.index-header::after {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 分页样式优化 */
+#pagination {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+#pagination .page-number,
+#pagination .extend {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+#pagination .page-number.current {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+#pagination .page-number:hover,
+#pagination .extend:hover {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+#pagination .space {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 调试辅助样式 */
+#recent-posts > .recent-post-item {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+#recent-posts > .recent-post-item.animated {
+  /* 移除所有首页文章卡片的自定义样式 */
+}
+
+/* 为特定页面组件添加限定前缀 */
+.post-template .article-meta,  /* 文章页面 */
+.archive-template .article-meta,  /* 归档页面 */
+.page-template .article-meta {   /* 自定义页面 */
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.post-template .article-meta i,
+.archive-template .article-meta i,
+.page-template .article-meta i {
+  margin-right: 5px;
+}
+
+/* 继续为其他样式添加限定前缀 */
+.post-template .article-item,
+.archive-template .article-item,
+.page-template .article-item {
+  /* 样式内容 */
+}
+
+/* 同时，确保首页的样式不受影响 */
+body:not(.index-template) .recent-post-item {
+  /* 这些样式不会应用到首页 */
+}
+
+/* 文章页面专用样式 */
+.post .article-meta,
+.page .article-meta,
+body:not(.home) .article-meta {
+  /* 样式内容 */
+}
+
+/* 避免影响首页 */
+body:not(.home) .recent-post-item {
+  /* 这些样式不会应用到首页 */
+}
+
+/* 文章页面样式 */
+body.post .article-content,
+body.page .article-content {
+  /* 文章样式 */
+}
+
+/* 资源页面样式 - 使用选择器限制 */
+body.page[data-path*="resources"] .resource-container,
+.resources-container,
+#resource-container {
+  /* 资源页面容器样式 */
+}
+
+.resource-card {
+  /* 资源卡片样式 */
+}
+
+/* 其他资源页面样式... */

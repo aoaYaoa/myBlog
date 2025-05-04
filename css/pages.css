@@ -1,0 +1,17 @@
+/* 指定只在博客文章页面或归档页面应用的样式 */
+.post .article-meta,
+.archive .article-meta {
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.post .article-meta i,
+.archive .article-meta i {
+  margin-right: 5px;
+}
+
+/* 其他页面特定样式... */

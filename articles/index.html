@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章列表 - aoaYaoa</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <a href="/" class="site-logo">
+        <img src= "/img/loading.gif" data-lazy-src="/img/avatar.jpg" alt="Logo">
+        <span>aoaYaoa</span>
+      </a>
+      <nav>
+        <a href="/"><i class="fas fa-home"></i> 首页</a>
+        <a href="/articles/" class="active"><i class="fas fa-book-open"></i> 文章</a>
+        <a href="/resources/"><i class="fas fa-compass"></i> 资源</a>
+        <a href="/about/"><i class="fas fa-user"></i> 关于</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="articles-container">
+      <h1 class="page-title">文章列表</h1>
+      <p class="page-desc">欢迎浏览我的文章集合，这里记录了我的技术探索和思考。</p>
+
+      <div class="article-list" id="article-list">
+        <!-- 文章列表将通过JavaScript动态加载 -->
+        <div class="loading">加载中...</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 aoaYaoa. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // 获取文章数据
+    fetch('/content.json')
+      .then(response => response.json())
+      .then(data => {
+        const articleList = document.getElementById('article-list');
+        articleList.innerHTML = '';
+
+        if (data.posts && data.posts.length > 0) {
+          data.posts.forEach(post => {
+            const date = new Date(post.date);
+            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+            const articleItem = document.createElement('div');
+            articleItem.className = 'article-item';
+
+            articleItem.innerHTML = `
+              <h2 class="article-title">
+                <a href="${post.path}">${post.title}</a>
+              </h2>
+              <div class="article-meta">
+                <span class="article-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
+                ${post.categories && post.categories.length ?
+                  `<span class="article-categories">
+                     <i class="far fa-folder"></i>
+                     ${post.categories.map(cat => `<a href="/categories/${cat.slug}/">${cat.name}</a>`).join(', ')}
+                   </span>` : ''}
+              </div>
+              <div class="article-excerpt">
+                ${post.excerpt || post.content.substring(0, 200) + '...'}
+              </div>
+              <a href="${post.path}" class="read-more">阅读全文 <i class="fas fa-arrow-right"></i></a>
+            `;
+
+            articleList.appendChild(articleItem);
+          });
+        } else {
+          articleList.innerHTML = '<div class="no-articles">暂无文章</div>';
+        }
+      })
+      .catch(error => {
+        console.error('Error loading articles:', error);
+        document.getElementById('article-list').innerHTML =
+          '<div class="error-message">加载文章列表时出错，请稍后重试。</div>';
+      });
+  </script>
+</body>
+</html>
