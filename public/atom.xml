@@ -126,9 +126,9 @@
     <category term="教程" scheme="https://aoayaoa.github.io/categories/%E6%95%99%E7%A8%8B/"/>
     
     
-    <category term="入门" scheme="https://aoayaoa.github.io/tags/%E5%85%A5%E9%97%A8/"/>
-    
     <category term="Promise" scheme="https://aoayaoa.github.io/tags/Promise/"/>
+    
+    <category term="入门" scheme="https://aoayaoa.github.io/tags/%E5%85%A5%E9%97%A8/"/>
     
   </entry>
   
@@ -196,9 +196,9 @@
     <category term="教程" scheme="https://aoayaoa.github.io/categories/%E6%95%99%E7%A8%8B/"/>
     
     
-    <category term="Hexo" scheme="https://aoayaoa.github.io/tags/Hexo/"/>
-    
     <category term="入门" scheme="https://aoayaoa.github.io/tags/%E5%85%A5%E9%97%A8/"/>
+    
+    <category term="Hexo" scheme="https://aoayaoa.github.io/tags/Hexo/"/>
     
   </entry>
   
